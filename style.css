@@ -12,47 +12,61 @@ body {
 }
 
 header {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    margin: 0;
+    padding: 0;
 }
 
 header h1{
-    padding-left: 4rem;
-    padding-bottom: 2rem;
     text-align: left;
+    padding: 1.5rem;
 }
 
 body {
-    padding: 5rem;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 .img_horizontal img{
-    width: 90%;
+    width: 95%;
+    max-width: 1000px;
     height: auto;
-    padding: 1rem;
 }
 
 .img_vertical img{
-    width: 50%;
+    width:95%;
+    max-width: 600px;
     height: auto;
-    padding: 1rem;
 }
 
 .title {
-    font-size: 1.3rem;
+    font-size: 1rem;
     margin: 0;
 }
 
 .info {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #8b8b8b;
     margin: 0;
     padding: 0;
 }
 
 .location {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #516c69;
     margin: 0;
     padding-bottom: 8rem;
+}
+
+footer {
+    background-color: #182120;
+    font-size: 0.8rem;
+    color: #516c69;
+    margin: 0;
+    padding: 1rem;
+}
+
+footer a {
+    color: #516c69;
 }
