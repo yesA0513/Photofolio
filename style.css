@@ -88,10 +88,11 @@ header h1 {
 }
 
 section {
-    column-count: 3;
-    column-gap: 20px;
-    padding: 20px;
-    max-width: 1600px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    max-width: 100%; 
     margin: 0 auto;
 }
 
@@ -107,12 +108,20 @@ section {
     }
 }
 
+.gallery-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1; /* 컬럼들이 동일한 너비를 가지도록 설정 */
+    width: 100%;
+}
+
 .gallery-item {
-    break-inside: avoid;
-    margin-bottom: 20px;
+    /* 💡 break-inside와 margin-bottom을 지우고, 컬럼 너비에 맞게 100%로 설정합니다. */
     position: relative;
     cursor: pointer;
     overflow: hidden;
+    width: 100%; 
 }
 
 .img-container {
@@ -513,10 +522,17 @@ section {
 
 /* --- Mobile View Adjustments --- */
 @media (max-width: 1024px) {
+/* 1. 모달 내부 컨텐츠 여백 제거 및 전체 화면 활용 */
+    .modal-content {
+        padding: 0;           /* 안쪽 여백 완전히 제거 */
+        max-width: 98vw;     /* 너비 100% 활용 */
+        max-height: 98vh;    /* 높이 100% 활용 */
+    }
+
     #modal-body {
         flex-direction: column;
-        overflow: hidden;
-        height: 90vh;
+        height: 100vh;        /* 전체 높이 유지 */
+        width: 100vw;
     }
 
     /* 닫기 및 모바일 전용 정보 버튼 공통 설정 */

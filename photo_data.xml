@@ -7,19 +7,17 @@
     <fNumber>5.6</fNumber>
     <exposureTime>1/1000</exposureTime>
     <focalLength>120.0 mm</focalLength>
+    <focal35mm>180 mmmm</focal35mm>
     <dateTime>2024-06-25T04:57:20+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>13.78 MB</fileSize>
     <width>3627</width>
     <height>5441</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>138,116,84</rgb>
     <theme>dark</theme>
     <lat>37.233702</lat>
     <lon>126.517849</lon>
+    <address>인천광역시, 대한민국</address>
   </photo>
   <photo name="Beauty of Hanok.jpg">
     <make>SONY</make>
@@ -28,40 +26,36 @@
     <fNumber>1.4</fNumber>
     <exposureTime>1/80</exposureTime>
     <focalLength>30.0 mm</focalLength>
+    <focal35mm>45 mmmm</focal35mm>
     <dateTime>2024-04-28T22:40:28+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>9.13 MB</fileSize>
     <width>6000</width>
     <height>4000</height>
-    <exposureBias>-1</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>ILCE-6400 v2.00</software>
     <rgb>19,16,12</rgb>
     <theme>dark</theme>
     <lat>37.478087</lat>
     <lon>127.183511</lon>
+    <address>광주시, 대한민국</address>
   </photo>
   <photo name="Boat.jpg">
     <make>SONY</make>
     <model>ILCE-6400</model>
     <iso>250</iso>
-    <fNumber>2.0</fNumber>
+    <fNumber>N/A</fNumber>
     <exposureTime>1/4000</exposureTime>
-    <focalLength>50.0mm</focalLength>
+    <focalLength>N/A</focalLength>
+    <focal35mm>N/A</focal35mm>
     <dateTime>2024-01-15T13:35:20+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>13.86 MB</fileSize>
     <width>5907</width>
     <height>3938</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 11.5 (Macintosh)</software>
     <rgb>136,136,135</rgb>
     <theme>light</theme>
     <lat>33.758173</lat>
     <lon>130.364137</lon>
+    <address>新宮町, 日本</address>
   </photo>
   <photo name="Branch.jpg">
     <make>Panasonic</make>
@@ -70,19 +64,36 @@
     <fNumber>1.4</fNumber>
     <exposureTime>1/6400</exposureTime>
     <focalLength>8.8 mm</focalLength>
+    <focal35mm>24 mmmm</focal35mm>
     <dateTime>2024-04-04T16:21:35.806</dateTime>
+    <timeZone></timeZone>
     <fileSize>8.23 MB</fileSize>
     <width>5472</width>
     <height>3648</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Macintosh)</software>
     <rgb>101,101,101</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
+  </photo>
+  <photo name="Cat Nap.jpg">
+    <make>SONY</make>
+    <model>ILCE-6400</model>
+    <iso>100</iso>
+    <fNumber>2.8</fNumber>
+    <exposureTime>1/1000</exposureTime>
+    <focalLength>50.0 mm</focalLength>
+    <focal35mm>75 mmmm</focal35mm>
+    <dateTime>2025-04-28T15:40:51+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
+    <fileSize>13.31 MB</fileSize>
+    <width>6000</width>
+    <height>4000</height>
+    <rgb>98,96,98</rgb>
+    <theme>dark</theme>
+    <lat>36.832354</lat>
+    <lon>127.176951</lon>
+    <address>천안시, 대한민국</address>
   </photo>
   <photo name="Fukuoka Tower.jpg">
     <make>SONY</make>
@@ -91,19 +102,17 @@
     <fNumber>3.5</fNumber>
     <exposureTime>1/40</exposureTime>
     <focalLength>18.0 mm</focalLength>
+    <focal35mm>27 mmmm</focal35mm>
     <dateTime>2024-01-13T19:33:50+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>13.16 MB</fileSize>
     <width>3815</width>
     <height>5722</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 11.5 (Macintosh)</software>
     <rgb>13,32,52</rgb>
     <theme>dark</theme>
     <lat>33.591948</lat>
     <lon>130.351781</lon>
+    <address>福岡市, 日本</address>
   </photo>
   <photo name="Ginkaku-ji.jpg">
     <make>SONY</make>
@@ -112,40 +121,36 @@
     <fNumber>5.6</fNumber>
     <exposureTime>1/200</exposureTime>
     <focalLength>59.0 mm</focalLength>
+    <focal35mm>88 mmmm</focal35mm>
     <dateTime>2024-01-18T15:57:33+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>17.74 MB</fileSize>
     <width>4000</width>
     <height>6000</height>
-    <exposureBias>-0.7</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 11.5 (Macintosh)</software>
     <rgb>37,37,31</rgb>
     <theme>dark</theme>
     <lat>35.026555</lat>
     <lon>135.798602</lon>
+    <address>京都市, 日本</address>
   </photo>
   <photo name="Gwanggyo Lake Park.jpg">
     <make>SONY</make>
     <model>ILCE-6400</model>
     <iso>6400</iso>
-    <fNumber>2.0</fNumber>
+    <fNumber>N/A</fNumber>
     <exposureTime>1/100</exposureTime>
-    <focalLength>50.0mm</focalLength>
+    <focalLength>N/A</focalLength>
+    <focal35mm>N/A</focal35mm>
     <dateTime>2024-01-08T17:56:43+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>18.48 MB</fileSize>
     <width>6000</width>
     <height>4000</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Macintosh)</software>
     <rgb>29,33,71</rgb>
     <theme>dark</theme>
     <lat>37.275812</lat>
     <lon>127.064078</lon>
+    <address>수원시, 대한민국</address>
   </photo>
   <photo name="Gyeongbokgung.jpg">
     <make>SONY</make>
@@ -154,19 +159,36 @@
     <fNumber>8</fNumber>
     <exposureTime>1/800</exposureTime>
     <focalLength>10.4 mm</focalLength>
+    <focal35mm>28 mmmm</focal35mm>
     <dateTime>2016-02-21T14:51:35</dateTime>
+    <timeZone></timeZone>
     <fileSize>12.01 MB</fileSize>
     <width>5472</width>
     <height>3080</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop 22.3 (Windows)</software>
     <rgb>101,116,100</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
+  </photo>
+  <photo name="Heavy Snow.jpg">
+    <make>SONY</make>
+    <model>ILCE-6400</model>
+    <iso>100</iso>
+    <fNumber>5</fNumber>
+    <exposureTime>1/80</exposureTime>
+    <focalLength>40.0 mm</focalLength>
+    <focal35mm>60 mmmm</focal35mm>
+    <dateTime>2024-11-27T16:32:48+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
+    <fileSize>20.65 MB</fileSize>
+    <width>6000</width>
+    <height>4000</height>
+    <rgb>133,143,166</rgb>
+    <theme>light</theme>
+    <lat></lat>
+    <lon></lon>
+    <address></address>
   </photo>
   <photo name="History of Joseon.jpg">
     <make>SONY</make>
@@ -175,19 +197,17 @@
     <fNumber>5</fNumber>
     <exposureTime>1/100</exposureTime>
     <focalLength>50.0 mm</focalLength>
+    <focal35mm>75 mmmm</focal35mm>
     <dateTime>2024-07-13T20:57:02+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>10.63 MB</fileSize>
     <width>3743</width>
     <height>5614</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>25,19,12</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="Holy.jpg">
     <make>SONY</make>
@@ -196,19 +216,17 @@
     <fNumber>4</fNumber>
     <exposureTime>1/30</exposureTime>
     <focalLength>20.0 mm</focalLength>
+    <focal35mm>30 mmmm</focal35mm>
     <dateTime>2025-02-04T08:57:48+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>9.94 MB</fileSize>
     <width>3903</width>
     <height>5854</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>26,19,14</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="LifeBoat.jpg">
     <make>SONY</make>
@@ -217,40 +235,55 @@
     <fNumber>5.6</fNumber>
     <exposureTime>1/500</exposureTime>
     <focalLength>69.0 mm</focalLength>
+    <focal35mm>103 mmmm</focal35mm>
     <dateTime>2024-06-25T05:20:14+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>14.31 MB</fileSize>
     <width>3850</width>
     <height>5775</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>129,132,134</rgb>
     <theme>light</theme>
     <lat>37.233791</lat>
     <lon>126.517798</lon>
+    <address>인천광역시, 대한민국</address>
+  </photo>
+  <photo name="Loafing.jpg">
+    <make>samsung</make>
+    <model>Galaxy S25</model>
+    <iso>25</iso>
+    <fNumber>2.4</fNumber>
+    <exposureTime>1/149</exposureTime>
+    <focalLength>7.0 mm</focalLength>
+    <focal35mm>69 mmmm</focal35mm>
+    <dateTime>2025-04-24T18:33:11.462+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
+    <fileSize>3.35 MB</fileSize>
+    <width>2621</width>
+    <height>3495</height>
+    <rgb>108,103,86</rgb>
+    <theme>dark</theme>
+    <lat>36.834186</lat>
+    <lon>127.177183</lon>
+    <address>천안시, 대한민국</address>
   </photo>
   <photo name="Meow.jpg">
     <make>SONY</make>
     <model>ILCE-6400</model>
     <iso>250</iso>
-    <fNumber>2.0</fNumber>
+    <fNumber>N/A</fNumber>
     <exposureTime>1/1600</exposureTime>
-    <focalLength>50.0mm</focalLength>
+    <focalLength>N/A</focalLength>
+    <focal35mm>N/A</focal35mm>
     <dateTime>2024-01-15T13:10:35+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>13.05 MB</fileSize>
     <width>3902</width>
     <height>5853</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 11.5 (Macintosh)</software>
     <rgb>84,81,75</rgb>
     <theme>dark</theme>
     <lat>33.758249</lat>
     <lon>130.36412</lon>
+    <address>新宮町, 日本</address>
   </photo>
   <photo name="Night City.jpg">
     <make>Apple</make>
@@ -259,19 +292,17 @@
     <fNumber>2.2</fNumber>
     <exposureTime>1/17</exposureTime>
     <focalLength>4.2 mm</focalLength>
+    <focal35mm>29 mmmm</focal35mm>
     <dateTime>2019-01-14T18:52:49.985+07:00</dateTime>
+    <timeZone></timeZone>
     <fileSize>0.35 MB</fileSize>
     <width>3264</width>
     <height>2448</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Spot</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Snapseed 2.19.280302127</software>
     <rgb>32,23,24</rgb>
     <theme>dark</theme>
     <lat>13.754314</lat>
     <lon>100.540589</lon>
+    <address>กรุงเทพมหานคร, ประเทศไทย</address>
   </photo>
   <photo name="Otaru Canal.jpg">
     <make>SONY</make>
@@ -280,19 +311,17 @@
     <fNumber>2.8</fNumber>
     <exposureTime>1/1250</exposureTime>
     <focalLength>30.0 mm</focalLength>
+    <focal35mm>45 mmmm</focal35mm>
     <dateTime>2025-08-20T15:18:15+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>13.63 MB</fileSize>
     <width>6000</width>
     <height>4000</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>ILCE-6400 v2.00</software>
     <rgb>212,211,213</rgb>
     <theme>light</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="Paldang Mulangae Park.jpg">
     <make>SONY</make>
@@ -301,19 +330,17 @@
     <fNumber>5</fNumber>
     <exposureTime>1/80</exposureTime>
     <focalLength>41.0 mm</focalLength>
+    <focal35mm>61 mmmm</focal35mm>
     <dateTime>2024-07-13T19:12:00+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>18.90 MB</fileSize>
     <width>4000</width>
     <height>6000</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>57,54,45</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="Rotary Tiller.jpg">
     <make>SONY</make>
@@ -322,19 +349,17 @@
     <fNumber>5.6</fNumber>
     <exposureTime>1/80</exposureTime>
     <focalLength>46.0 mm</focalLength>
+    <focal35mm>69 mmmm</focal35mm>
     <dateTime>2024-06-24T19:42:39+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>11.93 MB</fileSize>
     <width>3623</width>
     <height>5434</height>
-    <exposureBias>-1</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>41,36,28</rgb>
     <theme>dark</theme>
     <lat>37.232208</lat>
     <lon>126.515532</lon>
+    <address>인천광역시, 대한민국</address>
   </photo>
   <photo name="Sapporo TV Tower.jpg">
     <make>SONY</make>
@@ -343,19 +368,17 @@
     <fNumber>2.8</fNumber>
     <exposureTime>1/800</exposureTime>
     <focalLength>18.0 mm</focalLength>
+    <focal35mm>27 mmmm</focal35mm>
     <dateTime>2025-08-19T17:25:53+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>11.30 MB</fileSize>
     <width>3849</width>
     <height>5773</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>76,94,119</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="Seongsan Ilchulbong.jpg">
     <make>SONY</make>
@@ -364,19 +387,36 @@
     <fNumber>4</fNumber>
     <exposureTime>1/250</exposureTime>
     <focalLength>10.4 mm</focalLength>
+    <focal35mm>28 mmmm</focal35mm>
     <dateTime>2022-10-02T16:24:43</dateTime>
+    <timeZone></timeZone>
     <fileSize>10.75 MB</fileSize>
     <width>3648</width>
     <height>5472</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>67,77,61</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
+  </photo>
+  <photo name="Seopjikoji.jpg">
+    <make>Apple</make>
+    <model>iPhone 13 Pro Max</model>
+    <iso>50</iso>
+    <fNumber>1.5</fNumber>
+    <exposureTime>1/2994</exposureTime>
+    <focalLength>5.7 mm</focalLength>
+    <focal35mm>26 mmmm</focal35mm>
+    <dateTime>2026-02-14T13:39:49.297+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
+    <fileSize>2.72 MB</fileSize>
+    <width>4032</width>
+    <height>3024</height>
+    <rgb>130,147,164</rgb>
+    <theme>light</theme>
+    <lat>33.116914</lat>
+    <lon>126.265481</lon>
+    <address>서귀포시, 대한민국</address>
   </photo>
   <photo name="Seoul.jpg">
     <make>SONY</make>
@@ -385,40 +425,36 @@
     <fNumber>4.5</fNumber>
     <exposureTime>1/20</exposureTime>
     <focalLength>27.0 mm</focalLength>
+    <focal35mm>40 mmmm</focal35mm>
     <dateTime>2024-07-13T20:51:29+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>16.03 MB</fileSize>
     <width>6000</width>
     <height>4000</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>3,9,11</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="Shelter.jpg">
-    <make>Canon</make>
-    <model>New Autoboy</model>
-    <iso>200</iso>
+    <make>NORITSU KOKI</make>
+    <model>EZ Controller</model>
+    <iso>N/A</iso>
     <fNumber>N/A</fNumber>
     <exposureTime>N/A</exposureTime>
     <focalLength>N/A</focalLength>
-    <dateTime>2023-08-25</dateTime>
+    <focal35mm>N/A</focal35mm>
+    <dateTime>                   </dateTime>
+    <timeZone></timeZone>
     <fileSize>20.17 MB</fileSize>
     <width>6048</width>
     <height>4011</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>N/A</meteringMode>
-    <flash>N/A</flash>
-    <software>EZ Controller 7.40.010  (210714)</software>
     <rgb>89,98,82</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="Shoreline Park.jpg">
     <make>SONY</make>
@@ -427,19 +463,17 @@
     <fNumber>3.5</fNumber>
     <exposureTime>1/800</exposureTime>
     <focalLength>18.0 mm</focalLength>
+    <focal35mm>27 mmmm</focal35mm>
     <dateTime>2025-02-04T03:07:23+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>11.72 MB</fileSize>
     <width>6000</width>
     <height>4000</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>ILCE-6400 v2.00</software>
     <rgb>133,136,141</rgb>
     <theme>light</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="Stanford.jpg">
     <make>SONY</make>
@@ -448,19 +482,17 @@
     <fNumber>4.5</fNumber>
     <exposureTime>1/320</exposureTime>
     <focalLength>28.0 mm</focalLength>
+    <focal35mm>42 mmmm</focal35mm>
     <dateTime>2025-02-04T08:55:21+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>12.02 MB</fileSize>
     <width>5698</width>
     <height>3799</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>141,142,144</rgb>
     <theme>light</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
   <photo name="Sunrise.jpg">
     <make>SONY</make>
@@ -469,19 +501,17 @@
     <fNumber>4.5</fNumber>
     <exposureTime>1/1000</exposureTime>
     <focalLength>35.0 mm</focalLength>
+    <focal35mm>52 mmmm</focal35mm>
     <dateTime>2024-06-25T05:00:03+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>12.70 MB</fileSize>
     <width>3687</width>
     <height>5530</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>97,68,57</rgb>
     <theme>dark</theme>
     <lat>37.233805</lat>
     <lon>126.517907</lon>
+    <address>인천광역시, 대한민국</address>
   </photo>
   <photo name="Wish.jpg">
     <make>SONY</make>
@@ -490,18 +520,16 @@
     <fNumber>4</fNumber>
     <exposureTime>1/1250</exposureTime>
     <focalLength>50.0 mm</focalLength>
+    <focal35mm>75 mmmm</focal35mm>
     <dateTime>2026-02-12T13:10:34+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
     <fileSize>8.86 MB</fileSize>
     <width>3886</width>
     <height>5829</height>
-    <exposureBias>0 EV</exposureBias>
-    <whiteBalance>Auto</whiteBalance>
-    <meteringMode>Multi-segment</meteringMode>
-    <flash>Off, Did not fire</flash>
-    <software>Adobe Photoshop Lightroom Classic 13.2 (Windows)</software>
     <rgb>64,64,72</rgb>
     <theme>dark</theme>
     <lat></lat>
     <lon></lon>
+    <address></address>
   </photo>
 </photofolio>
