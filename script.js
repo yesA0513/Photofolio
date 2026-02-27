@@ -1,218 +1,90 @@
-const imageList = [
-    "Airplane.JPG",
-    "Beauty of Hanok.JPG",
-    "Boat.jpg",
-    "Branch.jpg",
-    "Fukuoka Tower.jpg",
-    "Gyeongbokgung.JPG",
-    "Gwanggyo Lake Park.jpg",
-    "History of Joseon.JPG",
-    "Holy.jpg",
-    "LifeBoat.JPG",
-    "Meow.jpg",
-    "Paldang Mulangae Park.JPG",
-    "Roatry Tiller.JPG",
-    "Seongsan Ilchulbong.jpg",
-    "Seoul.JPG",
-    "Shelter.JPG",
-    "Shoreline Park.JPG",
-    "Stanford.jpg",
-    "Sunrise.JPG",
-    "Wish.jpg",
-    "Sapporo TV Tower.jpg",
-    "Otaru Canal.JPG",
-    "Ginkaku-ji.jpg",
-    "Night City.JPG"
-];
+/**
+ * Photofolio - Client Side Script
+ * 미리 계산된 XML 데이터를 바탕으로 갤러리를 구성하고 모달을 제어합니다.
+ */
 
 let validResults = [];
 let currentImageIndex = 0;
+let touchstartX = 0;
+let touchendX = 0;
 
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", async () => {
     const section = document.getElementById('gallery-section');
     const loadingOverlay = document.getElementById('loading-overlay');
-    const modal = document.getElementById('info-modal');
-    const closeBtn = document.querySelector('.close-btn');
 
-    const closeModal = () => {
-        modal.classList.remove('show');
-        document.body.classList.remove('no-scroll'); // 모달 닫을 때 스크롤 복구
-        const modalContent = modal.querySelector('.modal-content');
-        if (modalContent) {
-            modalContent.style.backgroundColor = '';
-            modalContent.classList.remove('light-theme', 'dark-theme');
-        }
-        modal.classList.remove('light-theme', 'dark-theme');
-        // reset overlay background
-        modal.style.backgroundColor = '';
-        // reset info panel animation classes
-        const infoContainer = modal.querySelector('.modal-info-container');
-        if (infoContainer) {
-            infoContainer.classList.remove('show-info', 'hide-info');
-        }
-    };
+    try {
+        // 1. 데이터 로드 및 파싱
+        const response = await fetch('photo_data.xml');
+        const xmlText = await response.text();
+        const xmlDoc = new DOMParser().parseFromString(xmlText, "text/xml");
+        const photos = xmlDoc.getElementsByTagName("photo");
 
-    closeBtn.onclick = closeModal;
+        // 2. 데이터 매핑 (XML -> Object)
+        validResults = Array.from(photos).map(photo => {
+            const getVal = (tag) => photo.getElementsByTagName(tag)[0]?.textContent || "N/A";
+            const fileName = photo.getAttribute("name");
 
-    window.onclick = function (event) {
-        if (event.target == modal) closeModal();
-    }
+            // 날짜 포맷팅 (YYYY-MM-DD...)
+            const rawDate = getVal("dateTime");
+            const displayDate = (rawDate && rawDate.trim() !== "" && rawDate !== "1970:01:01 00:00:00")
+                ? rawDate.split('T')[0].replace(/-/g, '.').replace(/:/g, '.')
+                : "날짜 정보 없음";
 
-    // 스와이프 감지 함수
-    function handleGesture() {
-        const swipeThreshold = 50; // 스와이프 인정 거리 (픽셀)
-        if (touchendX < touchstartX - swipeThreshold) {
-            showNextImage(); // 왼쪽으로 밀면 다음 사진
-        }
-        if (touchendX > touchstartX + swipeThreshold) {
-            showPrevImage(); // 오른쪽으로 밀면 이전 사진
-        }
-    }
+            const w = parseInt(getVal("width"));
+            const h = parseInt(getVal("height"));
 
-    // 모달에 터치 이벤트 리스너 등록
-    const modalEl = document.getElementById('info-modal');
-
-    modalEl.addEventListener('touchstart', e => {
-        touchstartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    modalEl.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX;
-        // 정보창(modal-info-container)이 열려있을 때는 스와이프 방지
-        const infoContainer = document.querySelector('.modal-info-container');
-        if (!infoContainer.classList.contains('show-info')) {
-            handleGesture();
-        }
-    }, { passive: true });
-
-    // prev/next buttons are injected into modal content per-image, attach listeners after rendering
-
-    document.addEventListener('keydown', function (e) {
-        if (!modal.classList.contains('show')) return;
-        if (e.key === 'ArrowLeft') showPrevImage();
-        else if (e.key === 'ArrowRight') showNextImage();
-        else if (e.key === 'Escape') closeModal();
-    });
-
-    const colorThief = new ColorThief();
-
-    const imageDataPromises = imageList.map(fileName => {
-        return new Promise(async (resolve) => {
-            const originalSrc = `./img/${fileName}`;
-            const thumbSrc = `./img/thumb/${fileName}`;
-            let fileSize = "확인 불가";
-
-            try {
-                const response = await fetch(originalSrc, { method: 'HEAD' });
-                const bytes = response.headers.get('content-length');
-                if (bytes) fileSize = (bytes / (1024 * 1024)).toFixed(2) + " MB";
-            } catch (e) { }
-
-            // 로딩 속도 최적화: 용량이 작은 썸네일에서 주요 색상을 먼저 추출합니다.
-            const thumbImg = new Image();
-            thumbImg.src = thumbSrc;
-
-            thumbImg.onload = function () {
-                let dominantRgb = [17, 17, 17];
-                let theme = 'dark';
-
-                try {
-                    dominantRgb = colorThief.getColor(thumbImg);
-                    const brightness = 0.2126 * dominantRgb[0] + 0.7152 * dominantRgb[1] + 0.0722 * dominantRgb[2];
-                    theme = brightness > 150 ? 'light' : 'dark';
-                } catch (e) { }
-
-                // 색상 추출 후 EXIF를 읽기 위해 원본을 불러옵니다.
-                const origImg = new Image();
-                origImg.src = originalSrc;
-                origImg.onload = function () {
-                    EXIF.getData(origImg, async function () {
-                        const make = EXIF.getTag(this, "Make") || "Unknown";
-                        const model = EXIF.getTag(this, "Model") || "";
-                        const iso = EXIF.getTag(this, "ISOSpeedRatings") || "N/A";
-
-                        let fNumber = EXIF.getTag(this, "FNumber");
-                        let exposureTime = EXIF.getTag(this, "ExposureTime");
-                        let focalLength = EXIF.getTag(this, "FocalLength");
-                        let dateTime = EXIF.getTag(this, "DateTimeOriginal") || EXIF.getTag(this, "DateTime") || "1970:01:01 00:00:00";
-
-                        if (fNumber) fNumber = (fNumber.numerator / fNumber.denominator).toFixed(1);
-                        if (exposureTime) exposureTime = exposureTime < 1 ? "1/" + Math.round(1 / exposureTime) : exposureTime;
-                        else exposureTime = "N/A";
-                        if (focalLength) focalLength = Math.round(focalLength.numerator / focalLength.denominator) + "mm";
-                        else focalLength = "N/A";
-
-                        let displayDate = "날짜 정보 없음";
-                        if (dateTime !== "1970:01:01 00:00:00") {
-                            const dateParts = dateTime.split(" ")[0].split(":");
-                            displayDate = `${dateParts[0]}.${dateParts[1]}.${dateParts[2]}`;
-                        }
-
-                        const resolution = `${origImg.naturalWidth} x ${origImg.naturalHeight}`;
-                        const megapixels = (origImg.naturalWidth * origImg.naturalHeight / 1000000).toFixed(1) + "M";
-
-                        let flash = EXIF.getTag(this, "Flash");
-                        let flashStr = flash !== undefined ? ((flash % 2 !== 0) ? "On" : "Off") : "N/A";
-
-                        let expBias = EXIF.getTag(this, "ExposureBiasValue");
-                        let expBiasStr = "0 EV";
-                        if (expBias) {
-                            let val = expBias.numerator / expBias.denominator;
-                            expBiasStr = (val > 0 ? "+" : "") + val.toFixed(2) + " EV";
-                        }
-
-                        let wb = EXIF.getTag(this, "WhiteBalance");
-                        let wbStr = wb === 1 ? "Manual" : (wb === 0 ? "Auto" : "N/A");
-
-                        let meter = EXIF.getTag(this, "MeteringMode");
-                        let meterStr = "N/A";
-                        if (meter === 2) meterStr = "Center-weighted";
-                        else if (meter === 3) meterStr = "Spot";
-                        else if (meter === 5) meterStr = "Pattern";
-
-                        let lensModel = EXIF.getTag(this, "LensModel") || "N/A";
-                        let software = EXIF.getTag(this, "Software") || "N/A";
-
-                        let addressHtml = ``;
-                        const lat = EXIF.getTag(this, "GPSLatitude");
-                        const latRef = EXIF.getTag(this, "GPSLatitudeRef");
-                        const lon = EXIF.getTag(this, "GPSLongitude");
-                        const lonRef = EXIF.getTag(this, "GPSLongitudeRef");
-
-                        if (lat && lon) {
-                            const latitude = convertDMSToDD(lat[0], lat[1], lat[2], latRef);
-                            const longitude = convertDMSToDD(lon[0], lon[1], lon[2], lonRef);
-                            const address = await getAddress(latitude, longitude);
-                            addressHtml = `
-                                <span><i class="fa-solid fa-location-dot"></i> <a href="https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}" target="_blank">${address}</a></span>
-                            `;
-                        }
-
-                        resolve({
-                            fileName, originalSrc, thumbSrc,
-                            displayName: fileName.substring(0, fileName.lastIndexOf('.')).replace(/_/g, ' '),
-                            make, model, iso, fNumber, exposureTime, focalLength, dateTime, displayDate, resolution, megapixels, fileSize,
-                            flashStr, expBiasStr, wbStr, meterStr, lensModel, software, addressHtml,
-                            dominantRgb, theme
-                        });
-                    });
-                };
-                origImg.onerror = () => resolve(null);
+            return {
+                fileName,
+                displayName: fileName.split('.').slice(0, -1).join('.').replace(/_/g, ' '),
+                originalSrc: `./img/${fileName}`,
+                thumbSrc: `./img/thumb/${fileName}`,
+                // 서버에서 미리 계산된 색상 데이터
+                rgb: getVal("rgb") || "17,17,17",
+                theme: getVal("theme") || "dark",
+                // EXIF 정보
+                make: getVal("make"),
+                model: getVal("model"),
+                iso: getVal("iso"),
+                fNumber: getVal("fNumber"),
+                exposureTime: getVal("exposureTime"),
+                focalLength: getVal("focalLength"),
+                displayDate,
+                dateTime: rawDate,
+                fileSize: getVal("fileSize"),
+                resolution: `${w} x ${h}`,
+                megapixels: (w * h / 1000000).toFixed(1) + "M",
+                expBiasStr: getVal("exposureBias"),
+                wbStr: getVal("whiteBalance"),
+                meterStr: getVal("meteringMode"),
+                flashStr: getVal("flash"),
+                software: getVal("software")
             };
-            thumbImg.onerror = () => resolve(null);
         });
-    });
 
-    const results = await Promise.all(imageDataPromises);
-    validResults = results.filter(res => res !== null);
+        // 3. 날짜 역순 정렬
+        validResults.sort((a, b) => b.dateTime.localeCompare(a.dateTime));
 
-    validResults.sort((a, b) => b.dateTime.localeCompare(a.dateTime));
+        // 4. 갤러리 렌더링
+        renderGallery(section);
 
+    } catch (error) {
+        console.error("데이터 로드 중 오류 발생:", error);
+    } finally {
+        loadingOverlay.classList.add('fade-out');
+    }
+
+    // 5. 전역 이벤트 리스너 설정
+    initGlobalEvents();
+});
+
+/**
+ * 갤러리 아이템 생성 및 화면 출력
+ */
+function renderGallery(container) {
     validResults.forEach((data, index) => {
-        const wrapperDiv = document.createElement('div');
-        wrapperDiv.className = 'gallery-item';
-
-        wrapperDiv.innerHTML = `
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `
             <div class="img-container">
                 <img src="${data.thumbSrc}" alt="${data.displayName}" loading="lazy">
                 <div class="hover-overlay">
@@ -227,39 +99,41 @@ document.addEventListener("DOMContentLoaded", async function () {
                 </div>
             </div>
         `;
-
-        wrapperDiv.addEventListener('click', () => {
-            currentImageIndex = index;
-            updateModalContent();
-        });
-
-        section.appendChild(wrapperDiv);
+        item.addEventListener('click', () => openModal(index));
+        container.appendChild(item);
     });
+}
 
-    loadingOverlay.classList.add('fade-out');
-});
+/**
+ * 모달 열기 및 내용 업데이트
+ */
+function openModal(index) {
+    currentImageIndex = index;
+    const modal = document.getElementById('info-modal');
+    const data = validResults[index];
 
-function updateModalContent() {
+    document.body.classList.add('no-scroll');
+    updateModalUI(data); // 💡 여기서 UI와 이미지를 모두 업데이트합니다.
+    modal.classList.add('show');
+}
+
+/**
+ * 모달의 텍스트, 배경색 및 고해상도 이미지 업데이트
+ */
+function updateModalUI(data) {
     const modal = document.getElementById('info-modal');
     const modalBody = document.getElementById('modal-body');
-    const data = validResults[currentImageIndex];
 
-    // 모달을 열 때 뒤 배경화면 스크롤 잠금
-    document.body.classList.add('no-scroll');
-
-    // apply single-color overlay (modal) and keep modal-content transparent so it's a single tone
-    modal.classList.remove('light-theme', 'dark-theme');
-    modal.classList.add(`${data.theme}-theme`);
-    modal.style.backgroundColor = `rgba(${data.dominantRgb[0]}, ${data.dominantRgb[1]}, ${data.dominantRgb[2]}, 0.95)`;
-    const modalContent = modal.querySelector('.modal-content');
-    if (modalContent) modalContent.style.backgroundColor = 'transparent';
+    // 서버에서 가져온 RGB/테마 즉시 적용
+    modal.className = `modal show ${data.theme}-theme`;
+    modal.style.backgroundColor = `rgba(${data.rgb}, 1)`;
 
     modalBody.innerHTML = `
-        <div class="modal-image-container" id="panzoom-parent">
-            <img class="placeholder" id="modal-img-low" src="${data.thumbSrc}" alt="${data.displayName}">
-            <img class="full-image" id="modal-img-high" src="" alt="${data.displayName}">
-            <div class="nav-btn prev-btn"><i class="fa-solid fa-angle-left"></i></div>
-            <div class="nav-btn next-btn"><i class="fa-solid fa-angle-right"></i></div>
+        <div class="modal-image-container">
+            <img class="placeholder" id="modal-img-low" src="${data.thumbSrc}">
+            <img class="full-image" id="modal-img-high">
+            <div class="nav-btn prev-btn" onclick="changeImage(-1)"><i class="fa-solid fa-angle-left"></i></div>
+            <div class="nav-btn next-btn" onclick="changeImage(1)"><i class="fa-solid fa-angle-right"></i></div>
             <div class="nav-btn info-btn"><i class="fa-solid fa-info"></i></div>
         </div>
         <div class="modal-info-container">
@@ -267,141 +141,83 @@ function updateModalContent() {
             <div class="modal-basic-info">
                 <span><i class="fa-regular fa-calendar"></i> ${data.displayDate}</span>
                 <span><i class="fa-solid fa-camera"></i> ${data.make} ${data.model}</span>
-                ${data.addressHtml}
             </div>
             <div class="modal-details">
-                <div class="detail-item"><span class="detail-label">Focal Length</span><span class="detail-value">${data.focalLength}</span></div>
-                <div class="detail-item"><span class="detail-label">Aperture</span><span class="detail-value">f/${data.fNumber}</span></div>
-                <div class="detail-item"><span class="detail-label">Shutter Speed</span><span class="detail-value">${data.exposureTime}s</span></div>
-                <div class="detail-item"><span class="detail-label">ISO</span><span class="detail-value">${data.iso}</span></div>
-                <div class="detail-item"><span class="detail-label">Exposure Bias</span><span class="detail-value">${data.expBiasStr}</span></div>
-                <div class="detail-item"><span class="detail-label">Flash</span><span class="detail-value">${data.flashStr}</span></div>
-                <div class="detail-item"><span class="detail-label">White Balance</span><span class="detail-value">${data.wbStr}</span></div>
-                <div class="detail-item"><span class="detail-label">Metering Mode</span><span class="detail-value">${data.meterStr}</span></div>
-                <div class="detail-item"><span class="detail-label">Resolution</span><span class="detail-value">${data.resolution}</span></div>
-                <div class="detail-item"><span class="detail-label">File Size</span><span class="detail-value">${data.fileSize}</span></div>
-                <div class="detail-item"><span class="detail-label">Software</span><span class="detail-value">${data.software}</span></div>
+                ${renderDetailItem("Focal Length", data.focalLength)}
+                ${renderDetailItem("Aperture", `f/${data.fNumber}`)}
+                ${renderDetailItem("Shutter Speed", `${data.exposureTime}s`)}
+                ${renderDetailItem("ISO", data.iso)}
+                ${renderDetailItem("Resolution", data.resolution)}
+                ${renderDetailItem("File Size", data.fileSize)}
+                ${renderDetailItem("Software", data.software)}
             </div>
         </div>
     `;
 
-    modal.classList.add('show');
-
-    // attach nav button listeners (they were just injected)
-    const prevBtnEl = modal.querySelector('.prev-btn');
-    const nextBtnEl = modal.querySelector('.next-btn');
-    if (prevBtnEl) prevBtnEl.onclick = showPrevImage;
-    if (nextBtnEl) nextBtnEl.onclick = showNextImage;
-
-    // info button listener for mobile
-    const infoBtnEl = modal.querySelector('.info-btn');
-    const infoContainer = modal.querySelector('.modal-info-container');
-    // script.js 내의 infoBtnEl.onclick 부분 수정
-    // script.js 내의 infoBtnEl.onclick 부분을 아래 코드로 교체
-    if (infoBtnEl && infoContainer) {
-        infoBtnEl.onclick = (e) => {
+    // 모바일 정보 버튼 이벤트 재설정
+    const infoBtn = modalBody.querySelector('.info-btn');
+    const infoBox = modalBody.querySelector('.modal-info-container');
+    if (infoBtn) {
+        infoBtn.onclick = (e) => {
             e.stopPropagation();
-
-            if (infoContainer.classList.contains('show-info')) {
-                // 닫기: 애니메이션 클래스 추가
-                infoContainer.classList.remove('show-info');
-                infoContainer.classList.add('hide-info');
-
-                // 0.3초(애니메이션 시간) 후에 실제로 요소를 숨김
-                setTimeout(() => {
-                    if (infoContainer.classList.contains('hide-info')) {
-                        infoContainer.style.display = 'none';
-                        infoContainer.classList.remove('hide-info');
-                    }
-                }, 300);
-            } else {
-                // 열기: 요소를 먼저 보이고 애니메이션 시작
-                infoContainer.style.display = 'flex';
-                // 리플로우 강제 발생 (애니메이션이 즉시 적용되도록)
-                void infoContainer.offsetWidth;
-                infoContainer.classList.add('show-info');
-                infoContainer.classList.remove('hide-info');
-            }
+            infoBox.classList.toggle('show-info');
         };
     }
 
-    const lowImg = document.getElementById('modal-img-low');
+    // 💡 원래 openModal에 있던 이미지 로드 로직을 이곳으로 이동시켰습니다!
     const highImg = document.getElementById('modal-img-high');
-    // 부드러운 크로스페이드: 미리보기(블러) 위에 고해상도 이미지를 로드 후 서서히 보여줌
-    const highResImg = new Image();
-    highResImg.src = data.originalSrc;
-    highResImg.onload = () => {
-        highImg.src = highResImg.src;
-        // force reflow to ensure transition
-        void highImg.offsetWidth;
+    const lowImg = document.getElementById('modal-img-low');
+
+    highImg.style.opacity = '0';
+    highImg.src = data.originalSrc; // 방향키를 누를 때마다 새로운 고해상도 소스를 요청
+    highImg.onload = () => {
+        // 로드가 완료되면 블러 처리된 이미지를 서서히 숨기고 고해상도를 보여줌
         highImg.style.opacity = '1';
-        // fade out placeholder slightly later
-        setTimeout(() => {
-            if (lowImg) lowImg.style.opacity = '0';
-        }, 60);
-        // after transition, remove blur on low image for crisp fallback
-        setTimeout(() => {
-            if (lowImg) lowImg.style.filter = 'none';
-        }, 500);
+        setTimeout(() => { if (lowImg) lowImg.style.opacity = '0'; }, 100);
     };
-    // set modal (overlay) background to dominant color for full-screen cover
-    modal.style.backgroundColor = `rgba(${data.dominantRgb[0]}, ${data.dominantRgb[1]}, ${data.dominantRgb[2]}, 1)`;
+}
+function renderDetailItem(label, value) {
+    return `<div class="detail-item"><span class="detail-label">${label}</span><span class="detail-value">${value}</span></div>`;
 }
 
-function showNextImage() {
-    currentImageIndex = (currentImageIndex + 1) % validResults.length;
-    updateModalContent();
+/**
+ * 이미지 변경 (이전/다음)
+ */
+function changeImage(step) {
+    currentImageIndex = (currentImageIndex + step + validResults.length) % validResults.length;
+    updateModalUI(validResults[currentImageIndex]);
 }
 
-function showPrevImage() {
-    currentImageIndex = (currentImageIndex - 1 + validResults.length) % validResults.length;
-    updateModalContent();
-}
+/**
+ * 전역 이벤트 (닫기, 키보드, 스와이프)
+ */
+function initGlobalEvents() {
+    const modal = document.getElementById('info-modal');
+    const closeBtn = document.querySelector('.close-btn');
 
-function convertDMSToDD(degrees, minutes, seconds, direction) {
-    let deg = degrees.numerator / degrees.denominator;
-    let min = minutes.numerator / minutes.denominator;
-    let sec = seconds.numerator / seconds.denominator;
-    let dd = deg + (min / 60) + (sec / 3600);
-    if (direction === "S" || direction === "W") dd = dd * -1;
-    return dd;
-}
+    const closeModal = () => {
+        modal.classList.remove('show');
+        document.body.classList.remove('no-scroll');
+    };
 
-async function getAddress(lat, lon) {
-    try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&accept-language=en`);
-        const data = await response.json();
-        if (data && data.address) {
-            const city = data.address.city || data.address.town || data.address.province || data.address.state || "";
-            const country = data.address.country || "";
-            return [city, country].filter(Boolean).join(", ") || "Unknown Location";
+    closeBtn.onclick = closeModal;
+    window.onclick = (e) => { if (e.target === modal) closeModal(); };
+
+    document.addEventListener('keydown', (e) => {
+        if (!modal.classList.contains('show')) return;
+        if (e.key === 'ArrowLeft') changeImage(-1);
+        else if (e.key === 'ArrowRight') changeImage(1);
+        else if (e.key === 'Escape') closeModal();
+    });
+
+    // 스와이프 감지
+    modal.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX, { passive: true });
+    modal.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        const infoBox = document.querySelector('.modal-info-container');
+        if (!infoBox?.classList.contains('show-info')) {
+            if (touchendX < touchstartX - 50) changeImage(1);
+            if (touchendX > touchstartX + 50) changeImage(-1);
         }
-        return "Unknown Location";
-    } catch (error) {
-        return "Location Info Unavailable";
-    }
+    }, { passive: true });
 }
-
-// [2] script.js 파일 맨 하단에 스와이프 코드 추가
-let touchstartX = 0;
-let touchendX = 0;
-
-function handleGesture() {
-    const swipeThreshold = 50;
-    if (touchendX < touchstartX - swipeThreshold) showNextImage(); // 왼쪽으로 밀기
-    if (touchendX > touchstartX + swipeThreshold) showPrevImage(); // 오른쪽으로 밀기
-}
-
-const modalEl = document.getElementById('info-modal');
-modalEl.addEventListener('touchstart', e => {
-    touchstartX = e.changedTouches[0].screenX;
-}, { passive: true });
-
-modalEl.addEventListener('touchend', e => {
-    touchendX = e.changedTouches[0].screenX;
-    const infoContainer = document.querySelector('.modal-info-container');
-    // 상세 정보창이 닫혀있을 때만 사진 넘기기 작동
-    if (!infoContainer || !infoContainer.classList.contains('show-info')) {
-        handleGesture();
-    }
-}, { passive: true });
