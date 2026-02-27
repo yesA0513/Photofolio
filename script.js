@@ -198,16 +198,16 @@ function updateModalUI(data) {
                 <span><i class="fa-solid fa-location-dot"></i> ${locationHTML}</span>
             </div>
             <div class="modal-details">
-                ${renderDetailItem("Date & Time", data.fullDateTime)}
-                ${renderDetailItem("Time Zone", data.timeZone)}
-                ${renderDetailItem("35mm Equiv.", data.focal35mm)}
-                ${renderDetailItem("Focal Length", data.focalLength)}
-                ${renderDetailItem("Aperture", `f/${data.fNumber}`)}
-                ${renderDetailItem("Shutter Speed", `${data.exposureTime}s`)}
+                ${renderDetailItem("촬영 일시", data.fullDateTime)}
+                ${renderDetailItem("시간대", data.timeZone)}
+                ${renderDetailItem("35mm 환산 화각", data.focal35mm)}
+                ${renderDetailItem("화각", data.focalLength)}
+                ${renderDetailItem("조리개", `f/${data.fNumber}`)}
+                ${renderDetailItem("셔터 속도", `${data.exposureTime}s`)}
                 ${renderDetailItem("ISO", data.iso)}
-                ${renderDetailItem("Resolution", data.resolution)}
-                ${renderDetailItem("File Size", data.fileSize)}
-                ${renderDetailItem("Software", data.software)}
+                ${renderDetailItem("크기", data.resolution)}
+                ${renderDetailItem("파일 크기", data.fileSize)}
+                ${renderDetailItem("소프트웨어", data.software)}
             </div>
         </div>
     `;
