@@ -83,6 +83,7 @@ async function processImages() {
             xmlContent += `    <fileSize>${fileSize}</fileSize>\n`;
             xmlContent += `    <width>${tags.ImageWidth || 0}</width>\n`;
             xmlContent += `    <height>${tags.ImageHeight || 0}</height>\n`;
+            xmlContent += `    <software>${tags.Software || ''}</software>\n`;
             xmlContent += `    <rgb>${colorData.rgb}</rgb>\n`;
             xmlContent += `    <theme>${colorData.theme}</theme>\n`;
             xmlContent += `    <lat>${lat || ""}</lat>\n`;
