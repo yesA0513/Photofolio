@@ -1,0 +1,5 @@
+# 의존성 폴더 무시
+node_modules/
+
+# 운영체제 생성 파일 무시 (macOS의 경우)
+.DS_Store
