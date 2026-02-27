@@ -8,31 +8,33 @@
 }
 
 html {
-    overflow-y: overlay; /* 스크롤바를 페이지 위에 겹치게 설정 */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 body {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
     background-color: #111;
     color: #eee;
     font-family: 'Pretendard', sans-serif;
     overflow-x: hidden;
 }
 
-/* 커스텀 오버레이 스크롤바 디자인 */
 ::-webkit-scrollbar {
-    width: 14px;
+    display: none;
+    /* Chrome, Safari, Opera */
 }
 
 ::-webkit-scrollbar-track {
     background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    border: 4px solid transparent;
-    background-clip: padding-box;
-}
+
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.4);
@@ -75,7 +77,9 @@ body.no-scroll {
 }
 
 @keyframes spinner {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 header {
@@ -98,11 +102,15 @@ section {
 }
 
 @media (max-width: 1024px) {
-    section { column-count: 2; }
+    section {
+        column-count: 2;
+    }
 }
 
 @media (max-width: 600px) {
-    section { column-count: 1; }
+    section {
+        column-count: 1;
+    }
 }
 
 .gallery-item {
@@ -111,7 +119,6 @@ section {
     position: relative;
     cursor: pointer;
     overflow: hidden;
-    border-radius: 4px;
 }
 
 .img-container {
@@ -173,7 +180,7 @@ section {
 .exif-item {
     background: rgba(255, 255, 255, 0.15);
     padding: 8px 12px;
-    border-radius: 8px;
+    border-radius: 24px;
     font-size: 0.85em;
     display: flex;
     align-items: center;
@@ -214,7 +221,7 @@ section {
     justify-content: center;
     transform: scale(0.9);
     transition: transform 0.3s ease, background-color 0.35s ease;
-    border-radius: 8px;
+    border-radius: 24px;
     overflow: hidden;
 }
 
@@ -224,18 +231,28 @@ section {
 
 .close-btn {
     position: absolute;
-    top: 20px;
+    top: 30px;
     right: 30px;
+    width: 38px;
+    height: 38px;
+    background-color: rgba(0, 0, 0, 0.3);
+    /* 반투명 배경 */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #fff;
-    font-size: 30px;
     cursor: pointer;
-    z-index: 2010;
-    opacity: 0.7;
-    transition: opacity 0.2s, color 0.2s;
+    z-index: 2100;
+    opacity: 0.8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .close-btn:hover {
-    opacity: 1;
+    opacity: 0.7;
 }
 
 .modal-image-container {
@@ -277,17 +294,20 @@ section {
     top: 50%;
     transform: translateY(-50%);
     color: rgba(255, 255, 255, 0.8);
-    font-size: 18px; /* 크기를 줄여 선을 더 얇게 표현 */
+    font-size: 18px;
+    /* 크기를 줄여 선을 더 얇게 표현 */
     cursor: pointer;
     z-index: 2025;
-    width: 44px; /* 버튼 전체 크기 축소 */
+    width: 44px;
+    /* 버튼 전체 크기 축소 */
     height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.2); /* 배경을 더 투명하게 변경 */
+    background-color: rgba(0, 0, 0, 0.2);
+    /* 배경을 더 투명하게 변경 */
     backdrop-filter: blur(4px);
 }
 
@@ -297,8 +317,66 @@ section {
     color: #fff;
 }
 
-.modal-image-container .prev-btn { left: 15px; }
-.modal-image-container .next-btn { right: 15px; }
+.modal-image-container .prev-btn {
+    left: 15px;
+}
+
+.modal-image-container .next-btn {
+    right: 15px;
+}
+
+.modal-image-container .info-btn {
+    top: 15px;
+    left: 15px;
+    right: auto;
+    display: none;
+}
+
+.modal-image-container .info-btn:hover {
+    transform: scale(1.1);
+}
+
+.mobile-image-info {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+    color: #fff;
+    padding: 60px 20px 20px;
+    text-align: left;
+}
+
+.mobile-image-info h3 {
+    margin-bottom: 8px;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.mobile-image-info .meta-info {
+    font-size: 0.85em;
+    color: #ccc;
+    margin-bottom: 12px;
+}
+
+.mobile-image-info .exif-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+}
+
+.mobile-image-info .exif-item {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(5px);
+}
 
 #modal-body {
     width: 100%;
@@ -319,7 +397,7 @@ section {
     position: relative;
     overflow: hidden;
     /* 배경색과 테두리 삭제로 단일 색상으로 보이게 처리 */
-    background-color: transparent; 
+    background-color: transparent;
 }
 
 #modal-img {
@@ -340,7 +418,7 @@ section {
     justify-content: center;
     color: #ddd;
     overflow-y: auto;
-    
+
     /* 패널 내부 전용 스크롤바 디자인 */
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
@@ -350,10 +428,6 @@ section {
     width: 6px;
 }
 
-.modal-info-container::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-}
 
 .modal-info-container h2 {
     color: #fff;
@@ -395,7 +469,7 @@ section {
 
 .modal-details {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
+    border-radius: 24px;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -454,13 +528,13 @@ section {
 
 .modal.light-theme .close-btn,
 .modal.light-theme .nav-btn {
-    color: rgba(0,0,0,0.5);
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .modal.light-theme .close-btn:hover,
 .modal.light-theme .nav-btn:hover {
     color: #000;
-    background-color: rgba(0,0,0,0.05);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .modal.light-theme .modal-details {
@@ -468,7 +542,7 @@ section {
 }
 
 .modal.light-theme .detail-item {
-    border-color: rgba(0,0,0,0.05);
+    border-color: rgba(0, 0, 0, 0.05);
 }
 
 .modal.light-theme .detail-label {
@@ -490,21 +564,162 @@ section {
 @media (max-width: 1024px) {
     #modal-body {
         flex-direction: column;
-        overflow-y: auto;
+        overflow: hidden;
+        height: 90vh;
     }
-    .modal-image-container {
-        height: 60vh;
-        flex: none;
+
+    .close-btn,
+    .modal-image-container .info-btn {
+        position: fixed !important;
+        top: 25px !important;
+        width: 42px !important;
+        /* 크기 미세 조정 */
+        height: 42px !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50% !important;
+        background-color: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #fff !important;
+        z-index: 3000 !important;
+        /* 테두리를 더 얇고 투명하게 조정하여 깔끔하게 변경 */
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
-    #modal-img {
-        max-height: 60vh;
+
+    /* 아이콘 개별 크기 조정 (i가 더 커보이는 현상 방지) */
+    .modal-image-container .info-btn i {
+        font-size: 13px !important;
+        /* i는 더 작게 설정해야 x와 비슷해 보임 */
+        transform: translateY(0.5px);
+        /* 미세한 수직 위치 보정 */
     }
+
+    .close-btn i {
+        font-size: 20px;
+        /* 아이콘 크기 적정화 */
+    }
+
+    /* 정보 창 애니메이션 복구 및 강화 */
     .modal-info-container {
+        display: none;
+        /* 기본은 숨김 */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
         width: 100%;
-        padding: 20px 0;
+        max-height: 70vh;
+        padding: 24px;
+        border-radius: 24px 24px 24px 24px;
+        z-index: 3100;
+        overflow-y: auto;
+        /* 배경색에 투명도 부여 */
+        background: rgba(20, 20, 20, 0.95);
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+        transition: opacity 0.3s ease;
     }
-    /* 모바일/태블릿에서는 버튼을 숨겨 터치 인터페이스 충돌 방지 */
-    .modal-content .nav-btn { display: none; }
+
+    /* 이전/다음 화살표 버튼은 스와이프가 있으므로 숨김 */
+    .modal-image-container .prev-btn,
+    .modal-image-container .next-btn {
+        display: none !important;
+    }
+
+    .modal.dark-theme .modal-info-container {
+        background: rgba(20, 20, 20, 0.9);
+    }
+
+    .modal.light-theme .modal-info-container {
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    /* 열릴 때 */
+    .modal-info-container.show-info {
+        display: flex;
+        animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* 닫힐 때 */
+    .modal-info-container.hide-info {
+        display: flex;
+        /* 애니메이션 동안은 보여야 함 */
+        animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+    }
+
+    /* 모바일에서는 이전/다음 버튼 숨기고 정보 버튼만 표시 */
+    .modal-image-container .prev-btn,
+    .modal-image-container .next-btn {
+        display: none;
+    }
+
+    .close-btn {
+        right: 20px !important;
+        left: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .modal-image-container .info-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 20px;
+        left: 20px !important;
+        right: auto !important;
+        bottom: auto;
+        width: 30px;
+        height: 30px;
+        font-size: 30px;
+        background-color: transparent;
+        backdrop-filter: none;
+        border-radius: 0;
+        color: #fff;
+        opacity: 0.7;
+        transition: opacity 0.2s, color 0.2s;
+        transform: none;
+        z-index: 2010;
+        cursor: pointer;
+    }
+
+    .modal-image-container .info-btn:hover {
+        opacity: 1;
+        transform: none;
+    }
+
+    .modal.light-theme .modal-image-container .info-btn {
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal.light-theme .modal-image-container .info-btn:hover {
+        color: #000;
+    }
 }
 
 footer {
@@ -521,28 +736,32 @@ footer a {
 
 /* Readability panels depending on detected theme */
 .modal.dark-theme .modal-info-container {
-    background: rgba(0,0,0,0.45);
+    background: rgba(0, 0, 0, 0.45);
     padding: 18px;
-    border-radius: 8px;
+    border-radius: 24px;
     color: #eee;
 }
 
 .modal.light-theme .modal-info-container {
-    background: rgba(255,255,255,0.45);
+    background: rgba(255, 255, 255, 0.45);
     padding: 18px;
-    border-radius: 8px;
+    border-radius: 24px;
     color: #111;
 }
 
 /* Ensure nav/close contrast adapts to theme */
 .modal.light-theme .close-btn {
-    color: rgba(0,0,0,0.6);
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .modal.light-theme .modal-image-container .nav-btn {
-    background-color: rgba(255,255,255,0.75);
+    background-color: rgba(255, 255, 255, 0.75);
     color: #111;
 }
+
 .modal.dark-theme .modal-image-container .nav-btn {
-    background-color: rgba(0,0,0,0.32);
+    background-color: rgba(0, 0, 0, 0.32);
     color: #fff;
 }

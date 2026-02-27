@@ -28,7 +28,7 @@ const imageList = [
 let validResults = [];
 let currentImageIndex = 0;
 
-document.addEventListener("DOMContentLoaded", async function() {
+document.addEventListener("DOMContentLoaded", async function () {
     const section = document.getElementById('gallery-section');
     const loadingOverlay = document.getElementById('loading-overlay');
     const modal = document.getElementById('info-modal');
@@ -45,18 +45,50 @@ document.addEventListener("DOMContentLoaded", async function() {
         modal.classList.remove('light-theme', 'dark-theme');
         // reset overlay background
         modal.style.backgroundColor = '';
+        // reset info panel animation classes
+        const infoContainer = modal.querySelector('.modal-info-container');
+        if (infoContainer) {
+            infoContainer.classList.remove('show-info', 'hide-info');
+        }
     };
 
     closeBtn.onclick = closeModal;
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == modal) closeModal();
     }
 
+    // 스와이프 감지 함수
+    function handleGesture() {
+        const swipeThreshold = 50; // 스와이프 인정 거리 (픽셀)
+        if (touchendX < touchstartX - swipeThreshold) {
+            showNextImage(); // 왼쪽으로 밀면 다음 사진
+        }
+        if (touchendX > touchstartX + swipeThreshold) {
+            showPrevImage(); // 오른쪽으로 밀면 이전 사진
+        }
+    }
+
+    // 모달에 터치 이벤트 리스너 등록
+    const modalEl = document.getElementById('info-modal');
+
+    modalEl.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    modalEl.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        // 정보창(modal-info-container)이 열려있을 때는 스와이프 방지
+        const infoContainer = document.querySelector('.modal-info-container');
+        if (!infoContainer.classList.contains('show-info')) {
+            handleGesture();
+        }
+    }, { passive: true });
+
     // prev/next buttons are injected into modal content per-image, attach listeners after rendering
 
-    document.addEventListener('keydown', function(e) {
-        if (!modal.classList.contains('show')) return; 
+    document.addEventListener('keydown', function (e) {
+        if (!modal.classList.contains('show')) return;
         if (e.key === 'ArrowLeft') showPrevImage();
         else if (e.key === 'ArrowRight') showNextImage();
         else if (e.key === 'Escape') closeModal();
@@ -69,36 +101,36 @@ document.addEventListener("DOMContentLoaded", async function() {
             const originalSrc = `./img/${fileName}`;
             const thumbSrc = `./img/thumb/${fileName}`;
             let fileSize = "확인 불가";
-            
+
             try {
                 const response = await fetch(originalSrc, { method: 'HEAD' });
                 const bytes = response.headers.get('content-length');
                 if (bytes) fileSize = (bytes / (1024 * 1024)).toFixed(2) + " MB";
-            } catch (e) {}
+            } catch (e) { }
 
             // 로딩 속도 최적화: 용량이 작은 썸네일에서 주요 색상을 먼저 추출합니다.
             const thumbImg = new Image();
             thumbImg.src = thumbSrc;
-            
-            thumbImg.onload = function() {
+
+            thumbImg.onload = function () {
                 let dominantRgb = [17, 17, 17];
                 let theme = 'dark';
-                
+
                 try {
                     dominantRgb = colorThief.getColor(thumbImg);
                     const brightness = 0.2126 * dominantRgb[0] + 0.7152 * dominantRgb[1] + 0.0722 * dominantRgb[2];
                     theme = brightness > 150 ? 'light' : 'dark';
-                } catch(e) {}
+                } catch (e) { }
 
                 // 색상 추출 후 EXIF를 읽기 위해 원본을 불러옵니다.
                 const origImg = new Image();
                 origImg.src = originalSrc;
-                origImg.onload = function() {
-                    EXIF.getData(origImg, async function() {
+                origImg.onload = function () {
+                    EXIF.getData(origImg, async function () {
                         const make = EXIF.getTag(this, "Make") || "Unknown";
                         const model = EXIF.getTag(this, "Model") || "";
                         const iso = EXIF.getTag(this, "ISOSpeedRatings") || "N/A";
-                        
+
                         let fNumber = EXIF.getTag(this, "FNumber");
                         let exposureTime = EXIF.getTag(this, "ExposureTime");
                         let focalLength = EXIF.getTag(this, "FocalLength");
@@ -179,7 +211,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     validResults.forEach((data, index) => {
         const wrapperDiv = document.createElement('div');
         wrapperDiv.className = 'gallery-item';
-        
+
         wrapperDiv.innerHTML = `
             <div class="img-container">
                 <img src="${data.thumbSrc}" alt="${data.displayName}" loading="lazy">
@@ -228,6 +260,7 @@ function updateModalContent() {
             <img class="full-image" id="modal-img-high" src="" alt="${data.displayName}">
             <div class="nav-btn prev-btn"><i class="fa-solid fa-angle-left"></i></div>
             <div class="nav-btn next-btn"><i class="fa-solid fa-angle-right"></i></div>
+            <div class="nav-btn info-btn"><i class="fa-solid fa-info"></i></div>
         </div>
         <div class="modal-info-container">
             <h2>${data.displayName}</h2>
@@ -259,6 +292,38 @@ function updateModalContent() {
     const nextBtnEl = modal.querySelector('.next-btn');
     if (prevBtnEl) prevBtnEl.onclick = showPrevImage;
     if (nextBtnEl) nextBtnEl.onclick = showNextImage;
+
+    // info button listener for mobile
+    const infoBtnEl = modal.querySelector('.info-btn');
+    const infoContainer = modal.querySelector('.modal-info-container');
+    // script.js 내의 infoBtnEl.onclick 부분 수정
+    // script.js 내의 infoBtnEl.onclick 부분을 아래 코드로 교체
+    if (infoBtnEl && infoContainer) {
+        infoBtnEl.onclick = (e) => {
+            e.stopPropagation();
+
+            if (infoContainer.classList.contains('show-info')) {
+                // 닫기: 애니메이션 클래스 추가
+                infoContainer.classList.remove('show-info');
+                infoContainer.classList.add('hide-info');
+
+                // 0.3초(애니메이션 시간) 후에 실제로 요소를 숨김
+                setTimeout(() => {
+                    if (infoContainer.classList.contains('hide-info')) {
+                        infoContainer.style.display = 'none';
+                        infoContainer.classList.remove('hide-info');
+                    }
+                }, 300);
+            } else {
+                // 열기: 요소를 먼저 보이고 애니메이션 시작
+                infoContainer.style.display = 'flex';
+                // 리플로우 강제 발생 (애니메이션이 즉시 적용되도록)
+                void infoContainer.offsetWidth;
+                infoContainer.classList.add('show-info');
+                infoContainer.classList.remove('hide-info');
+            }
+        };
+    }
 
     const lowImg = document.getElementById('modal-img-low');
     const highImg = document.getElementById('modal-img-high');
@@ -316,3 +381,27 @@ async function getAddress(lat, lon) {
         return "Location Info Unavailable";
     }
 }
+
+// [2] script.js 파일 맨 하단에 스와이프 코드 추가
+let touchstartX = 0;
+let touchendX = 0;
+
+function handleGesture() {
+    const swipeThreshold = 50;
+    if (touchendX < touchstartX - swipeThreshold) showNextImage(); // 왼쪽으로 밀기
+    if (touchendX > touchstartX + swipeThreshold) showPrevImage(); // 오른쪽으로 밀기
+}
+
+const modalEl = document.getElementById('info-modal');
+modalEl.addEventListener('touchstart', e => {
+    touchstartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+modalEl.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX;
+    const infoContainer = document.querySelector('.modal-info-container');
+    // 상세 정보창이 닫혀있을 때만 사진 넘기기 작동
+    if (!infoContainer || !infoContainer.classList.contains('show-info')) {
+        handleGesture();
+    }
+}, { passive: true });
