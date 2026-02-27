@@ -7,9 +7,12 @@
     font-family: 'Pretendard', sans-serif;
 }
 
-html, body {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+html,
+body {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 body {
@@ -19,7 +22,8 @@ body {
 }
 
 ::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
+    /* Chrome, Safari, Opera */
 }
 
 ::-webkit-scrollbar-track {
@@ -67,7 +71,9 @@ body.no-scroll {
 }
 
 @keyframes spinner {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 header {
@@ -90,11 +96,15 @@ section {
 }
 
 @media (max-width: 1024px) {
-    section { column-count: 2; }
+    section {
+        column-count: 2;
+    }
 }
 
 @media (max-width: 600px) {
-    section { column-count: 1; }
+    section {
+        column-count: 1;
+    }
 }
 
 .gallery-item {
@@ -164,7 +174,7 @@ section {
 .exif-item {
     background: rgba(255, 255, 255, 0.15);
     padding: 8px 12px;
-    border-radius: 24px;
+    border-radius: 28px;
     font-size: 0.85em;
     display: flex;
     align-items: center;
@@ -195,6 +205,7 @@ section {
     /* 💡 모달이 완전히 열린(.show) 이후에만 배경색 전환 애니메이션을 활성화 */
     transition: opacity 0.3s ease, visibility 0.3s ease, background-color 1s ease;
 }
+
 .modal-content {
     background-color: transparent;
     padding: 20px;
@@ -296,8 +307,13 @@ section {
     color: #fff;
 }
 
-.modal-image-container .prev-btn { left: 15px; }
-.modal-image-container .next-btn { right: 15px; }
+.modal-image-container .prev-btn {
+    left: 15px;
+}
+
+.modal-image-container .next-btn {
+    right: 15px;
+}
 
 .modal-image-container .info-btn {
     top: 15px;
@@ -411,37 +427,89 @@ section {
 .modal.dark-theme .modal-info-container {
     background: rgba(0, 0, 0, 0.45);
     padding: 18px;
-    border-radius: 24px;
+    border-radius: 34px;
     color: #eee;
 }
 
 .modal.light-theme .modal-info-container {
     background: rgba(255, 255, 255, 0.45);
     padding: 18px;
-    border-radius: 24px;
+    border-radius: 34px;
     color: #111;
 }
 
-.modal.light-theme .modal-info-container h2 { color: #000; }
+.modal.light-theme .modal-info-container h2 {
+    color: #000;
+}
+
 .modal.light-theme .modal-info-container,
 .modal.light-theme .modal-basic-info,
-.modal.light-theme .modal-basic-info span { color: #333; }
-.modal.light-theme .modal-basic-info span i { color: #555; }
-.modal.light-theme .modal-basic-info a { color: #333; }
-.modal.light-theme .modal-basic-info a:hover { color: #000; }
+.modal.light-theme .modal-basic-info span {
+    color: #333;
+}
+
+.modal.light-theme .modal-basic-info span i {
+    color: #555;
+}
+
+.modal.light-theme .modal-basic-info a {
+    color: #333;
+}
+
+.modal.light-theme .modal-basic-info a:hover {
+    color: #000;
+}
+
 .modal.light-theme .close-btn,
-.modal.light-theme .nav-btn { color: rgba(0, 0, 0, 0.5); }
+.modal.light-theme .nav-btn {
+    color: rgba(0, 0, 0, 0.5);
+}
+
 .modal.light-theme .close-btn:hover,
-.modal.light-theme .nav-btn:hover { color: #000; background-color: rgba(0, 0, 0, 0.05); }
-.modal.light-theme .modal-details { background: rgba(0, 0, 0, 0.05); }
-.modal.light-theme .detail-item { border-color: rgba(0, 0, 0, 0.05); }
-.modal.light-theme .detail-label { color: #666; }
-.modal.light-theme .detail-value { color: #111; }
-.modal.light-theme .modal-info-container { scrollbar-color: rgba(0, 0, 0, 0.2) transparent; }
-.modal.light-theme .modal-info-container::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.2); }
-.modal.light-theme .close-btn { background-color: rgba(255, 255, 255, 0.5); color: #000; border: 1px solid rgba(0, 0, 0, 0.1); }
-.modal.light-theme .modal-image-container .nav-btn { background-color: rgba(255, 255, 255, 0.75); color: #111; }
-.modal.dark-theme .modal-image-container .nav-btn { background-color: rgba(0, 0, 0, 0.32); color: #fff; }
+.modal.light-theme .nav-btn:hover {
+    color: #000;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.modal.light-theme .modal-details {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.modal.light-theme .detail-item {
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.modal.light-theme .detail-label {
+    color: #666;
+}
+
+.modal.light-theme .detail-value {
+    color: #111;
+}
+
+.modal.light-theme .modal-info-container {
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.modal.light-theme .modal-info-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal.light-theme .close-btn {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal.light-theme .modal-image-container .nav-btn {
+    background-color: rgba(255, 255, 255, 0.75);
+    color: #111;
+}
+
+.modal.dark-theme .modal-image-container .nav-btn {
+    background-color: rgba(0, 0, 0, 0.32);
+    color: #fff;
+}
 
 /* --- Mobile View Adjustments --- */
 @media (max-width: 1024px) {
@@ -477,7 +545,7 @@ section {
         margin: 0 !important;
         padding: 0 !important;
     }
-    
+
     .close-btn i {
         font-size: 20px;
     }
@@ -489,8 +557,19 @@ section {
     }
 
     /* 정보 패널 컨테이너 */
+    /* 1. 정보 패널 컨테이너 수정 */
     .modal-info-container {
-        display: none;
+        display: flex;
+        visibility: hidden;
+        /* 화면에서 숨기되 애니메이션은 가능하게 만듭니다. */
+        opacity: 0;
+        /* 처음엔 투명하게 만듭니다. */
+        transform: translateY(100%);
+        /* 창을 화면 아래로 100% 내려서 숨겨둡니다. */
+
+        /* 나타나고 사라질 때 작동할 부드러운 전환 효과(Transition)를 추가합니다. */
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0.3s;
+
         position: fixed;
         bottom: 0;
         left: 0;
@@ -502,8 +581,6 @@ section {
         z-index: 3100;
         overflow-y: auto;
         background: rgba(20, 20, 20, 0.95);
-        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
-        transition: opacity 0.3s ease;
     }
 
     .modal.dark-theme .modal-info-container {
@@ -516,13 +593,9 @@ section {
 
     /* 정보 창 슬라이드 애니메이션 */
     .modal-info-container.show-info {
-        display: flex;
-        animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    @keyframes slideUp {
-        from { transform: translateY(100%); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+        visibility: visible; /* 화면에 보이게 설정 */
+        opacity: 1; /* 투명도 100% */
+        transform: translateY(0); /* 원래 위치(화면 위쪽)로 부드럽게 올라옵니다. */
     }
 
     /* 모바일 전용 정보 버튼의 개별 스타일 보정 */

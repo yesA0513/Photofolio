@@ -46,9 +46,9 @@
     <make>SONY</make>
     <model>ILCE-6400</model>
     <iso>250</iso>
-    <fNumber>N/A</fNumber>
+    <fNumber>2.0</fNumber>
     <exposureTime>1/4000</exposureTime>
-    <focalLength>N/A</focalLength>
+    <focalLength>50.0mm</focalLength>
     <dateTime>2024-01-15T13:35:20+09:00</dateTime>
     <fileSize>13.86 MB</fileSize>
     <width>5907</width>
@@ -130,9 +130,9 @@
     <make>SONY</make>
     <model>ILCE-6400</model>
     <iso>6400</iso>
-    <fNumber>N/A</fNumber>
+    <fNumber>2.0</fNumber>
     <exposureTime>1/100</exposureTime>
-    <focalLength>N/A</focalLength>
+    <focalLength>50.0mm</focalLength>
     <dateTime>2024-01-08T17:56:43+09:00</dateTime>
     <fileSize>18.48 MB</fileSize>
     <width>6000</width>
@@ -235,9 +235,9 @@
     <make>SONY</make>
     <model>ILCE-6400</model>
     <iso>250</iso>
-    <fNumber>N/A</fNumber>
+    <fNumber>2.0</fNumber>
     <exposureTime>1/1600</exposureTime>
-    <focalLength>N/A</focalLength>
+    <focalLength>50.0mm</focalLength>
     <dateTime>2024-01-15T13:10:35+09:00</dateTime>
     <fileSize>13.05 MB</fileSize>
     <width>3902</width>
@@ -400,13 +400,13 @@
     <lon></lon>
   </photo>
   <photo name="Shelter.jpg">
-    <make>NORITSU KOKI</make>
-    <model>EZ Controller</model>
-    <iso>N/A</iso>
+    <make>Canon</make>
+    <model>New Autoboy</model>
+    <iso>200</iso>
     <fNumber>N/A</fNumber>
     <exposureTime>N/A</exposureTime>
     <focalLength>N/A</focalLength>
-    <dateTime>                   </dateTime>
+    <dateTime>2023-08-25</dateTime>
     <fileSize>20.17 MB</fileSize>
     <width>6048</width>
     <height>4011</height>

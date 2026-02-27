@@ -32,9 +32,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const w = parseInt(getVal("width"));
             const h = parseInt(getVal("height"));
+            
+            // 💡 수정된 부분 1: 파일명에서 확장자를 추출하여 대문자로 저장합니다 (예: jpg -> JPG)
+            const extension = fileName.split('.').pop().toUpperCase();
 
             return {
                 fileName,
+                extension, // 💡 추출한 확장자를 데이터 객체에 추가합니다.
                 displayName: fileName.split('.').slice(0, -1).join('.').replace(/_/g, ' '),
                 originalSrc: `./img/${fileName}`,
                 thumbSrc: `./img/thumb/${fileName}`,
@@ -84,12 +88,13 @@ function renderGallery(container) {
     validResults.forEach((data, index) => {
         const item = document.createElement('div');
         item.className = 'gallery-item';
+        // 💡 수정된 부분 2: 마우스를 올렸을 때(hover) 보이는 meta-info에서 'JPG' 대신 제조사(make)와 모델명(model)이 나오도록 수정했습니다.
         item.innerHTML = `
             <div class="img-container">
                 <img src="${data.thumbSrc}" alt="${data.displayName}" loading="lazy">
                 <div class="hover-overlay">
                     <h3>${data.displayName}</h3>
-                    <p class="meta-info">JPG • ${data.megapixels} • ${data.fileSize}</p>
+                    <p class="meta-info">${data.make} ${data.model} • ${data.megapixels} • ${data.fileSize}</p>
                     <div class="exif-grid">
                         <div class="exif-item"><i class="fa-solid fa-crosshairs"></i> ${data.focalLength}</div>
                         <div class="exif-item"><i class="fa-solid fa-circle-dot"></i> f/${data.fNumber}</div>
@@ -113,7 +118,7 @@ function openModal(index) {
     const data = validResults[index];
 
     document.body.classList.add('no-scroll');
-    updateModalUI(data); // 💡 여기서 UI와 이미지를 모두 업데이트합니다.
+    updateModalUI(data); 
     modal.classList.add('show');
 }
 
@@ -128,6 +133,7 @@ function updateModalUI(data) {
     modal.className = `modal show ${data.theme}-theme`;
     modal.style.backgroundColor = `rgba(${data.rgb}, 1)`;
 
+    // 💡 수정된 부분 3: 상세 정보 창(modal-details) 목록 최상단에 확장자(Format) 정보를 추가했습니다.
     modalBody.innerHTML = `
         <div class="modal-image-container">
             <img class="placeholder" id="modal-img-low" src="${data.thumbSrc}">
@@ -143,6 +149,7 @@ function updateModalUI(data) {
                 <span><i class="fa-solid fa-camera"></i> ${data.make} ${data.model}</span>
             </div>
             <div class="modal-details">
+                ${renderDetailItem("Format", data.extension)}
                 ${renderDetailItem("Focal Length", data.focalLength)}
                 ${renderDetailItem("Aperture", `f/${data.fNumber}`)}
                 ${renderDetailItem("Shutter Speed", `${data.exposureTime}s`)}
@@ -164,18 +171,17 @@ function updateModalUI(data) {
         };
     }
 
-    // 💡 원래 openModal에 있던 이미지 로드 로직을 이곳으로 이동시켰습니다!
     const highImg = document.getElementById('modal-img-high');
     const lowImg = document.getElementById('modal-img-low');
 
     highImg.style.opacity = '0';
-    highImg.src = data.originalSrc; // 방향키를 누를 때마다 새로운 고해상도 소스를 요청
+    highImg.src = data.originalSrc; 
     highImg.onload = () => {
-        // 로드가 완료되면 블러 처리된 이미지를 서서히 숨기고 고해상도를 보여줌
         highImg.style.opacity = '1';
         setTimeout(() => { if (lowImg) lowImg.style.opacity = '0'; }, 100);
     };
 }
+
 function renderDetailItem(label, value) {
     return `<div class="detail-item"><span class="detail-label">${label}</span><span class="detail-value">${value}</span></div>`;
 }
