@@ -168,6 +168,9 @@ function openModal(index) {
     document.body.classList.add('no-scroll');
     updateModalUI(data);
     modal.classList.add('show');
+
+    // 💡 핵심: 모달이 열릴 때 브라우저 히스토리에 가짜 기록(상태)을 하나 추가합니다.
+    history.pushState({ modalOpen: true }, "");
 }
 
 function updateModalUI(data) {
@@ -186,6 +189,11 @@ function updateModalUI(data) {
         <div class="modal-image-container">
             <img class="placeholder" id="modal-img-low" src="${data.thumbSrc}">
             <img class="full-image" id="modal-img-high">
+            
+            <div id="high-res-loader" class="high-res-loader">
+                <i class="fa-solid fa-spinner fa-spin"></i> 고화질로 불러오는 중
+            </div>
+
             <div class="nav-btn prev-btn" onclick="changeImage(-1)"><i class="fa-solid fa-angle-left"></i></div>
             <div class="nav-btn next-btn" onclick="changeImage(1)"><i class="fa-solid fa-angle-right"></i></div>
             <div class="nav-btn info-btn"><i class="fa-solid fa-info"></i></div>
@@ -223,11 +231,25 @@ function updateModalUI(data) {
 
     const highImg = document.getElementById('modal-img-high');
     const lowImg = document.getElementById('modal-img-low');
+    const loader = document.getElementById('high-res-loader'); // 💡 로더 엘리먼트 가져오기
 
+    // 초기 상태: 고화질 이미지 투명하게, 로더는 보이게 설정
     highImg.style.opacity = '0';
+    if (loader) loader.style.opacity = '1';
+
     highImg.src = data.originalSrc;
+    
+    // 💡 고화질 이미지가 완전히 로드되었을 때 실행되는 함수
     highImg.onload = () => {
-        highImg.style.opacity = '1';
+        highImg.style.opacity = '1'; // 고화질 이미지 보여주기
+        
+        // 로딩 완료 후 로더 숨기고 제거하기
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 300); // 페이드아웃 후 DOM에서 깔끔하게 삭제
+        }
+        
+        // 저화질 썸네일 숨기기
         setTimeout(() => { if (lowImg) lowImg.style.opacity = '0'; }, 100);
     };
 }
@@ -246,13 +268,32 @@ function initGlobalEvents() {
     const modal = document.getElementById('info-modal');
     const closeBtn = document.querySelector('.close-btn');
 
-    const closeModal = () => {
+    // 💡 isFromPopState: 뒤로가기 버튼에 의해 실행된 것인지 확인하는 플래그
+    const closeModal = (isFromPopState = false) => {
+        if (!modal.classList.contains('show')) return;
+        
         modal.classList.remove('show');
         document.body.classList.remove('no-scroll');
+        
+        // 정보 창이 띄워져 있다면 함께 닫아줍니다.
+        const infoBox = document.querySelector('.modal-info-container');
+        if (infoBox) infoBox.classList.remove('show-info');
+
+        // 직접 닫기 버튼을 누른 경우, 꼬이지 않게 히스토리(뒤로가기 기록)도 한 칸 지워줍니다.
+        if (!isFromPopState && history.state?.modalOpen) {
+            history.back();
+        }
     };
 
-    closeBtn.onclick = closeModal;
+    closeBtn.onclick = () => closeModal();
     window.onclick = (e) => { if (e.target === modal) closeModal(); };
+
+    // 💡 핵심: 안드로이드/기기의 뒤로가기 버튼을 눌렀을 때 실행되는 이벤트
+    window.addEventListener('popstate', () => {
+        if (modal.classList.contains('show')) {
+            closeModal(true); // 뒤로가기에 의해 닫혔다고 알려줌
+        }
+    });
 
     document.addEventListener('keydown', (e) => {
         if (!modal.classList.contains('show')) return;

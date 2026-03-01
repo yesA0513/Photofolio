@@ -353,7 +353,8 @@ section {
     flex-direction: column;
     justify-content: center;
     color: #ddd;
-    overflow-y: overlay;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
     scrollbar-gutter: stable both-edges;
@@ -533,6 +534,38 @@ section {
     color: #fff;
 }
 
+/* --- 고화질 이미지 로딩 안내 메시지 --- */
+.high-res-loader {
+    position: absolute;
+    bottom: 40px; /* 데스크톱 기준 하단에서 40px 위 */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.65); /* 반투명 검은색 배경 */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 30px; /* 둥근 캡슐 모양 */
+    font-size: 0.9em;
+    font-weight: 400;
+    backdrop-filter: blur(8px); /* 배경 블러 처리로 고급스러움 추가 */
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2050; /* 이미지보다 위에 오도록 설정 */
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none; /* 사용자가 클릭하는 것을 방해하지 않음 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 모바일 뷰 보정 (모바일에서는 화면이 작고 스와이프 등 조작을 고려해 위치를 조금 올림) */
+@media (max-width: 1024px) {
+    .high-res-loader {
+        bottom: 80px; 
+        font-size: 0.85em;
+        padding: 8px 16px;
+    }
+}
+
 /* --- Mobile View Adjustments --- */
 @media (max-width: 1024px) {
 
@@ -600,9 +633,7 @@ section {
     .modal-info-container {
         display: flex;
         flex-direction: column;
-        /* 세로 방향 유지 */
-        justify-content: flex-start !important;
-        /* 핵심: 항상 위에서부터 정렬 */
+        justify-content: flex-start !important; 
         visibility: hidden;
         opacity: 0;
         transform: translateY(100%);
@@ -613,16 +644,20 @@ section {
         left: 0;
         right: 0;
         width: 100%;
-        /* max-height를 조금 조절하고, padding-top을 충분히 주어 닫기 버튼과의 간섭을 피함 */
         max-height: 75vh;
         padding: 30px 24px 40px 24px;
-        border-radius: 35px;
-        /* 위쪽만 둥글게 */
+        
+        /* 💡 수정됨: 하단은 둥글 필요가 없으므로 위쪽만 둥글게 명확히 지정 */
+        border-radius: 35px 35px 0 0; 
         z-index: 3100;
+        
+        /* 💡 추가 및 수정됨: 안드로이드 스크롤 버그를 잡는 핵심 코드들 */
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-right: 24px;
-        /* iOS/안드로이드 부드러운 스크롤 */
+        -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+        overscroll-behavior-y: contain; /* 스크롤 체이닝 방지 */
+        touch-action: pan-y; /* 브라우저에게 세로 스크롤 동작을 명시적으로 허용 */
+        will-change: transform; /* 애니메이션 후 렌더링 최적화 및 스크롤 영역 재계산 강제 */
+        pointer-events: auto; /* 터치 이벤트가 확실히 이 컨테이너에 꽂히도록 설정 */
     }
 
     .modal.dark-theme .modal-info-container {
