@@ -191,7 +191,7 @@ function updateModalUI(data) {
             <img class="full-image" id="modal-img-high">
             
             <div id="high-res-loader" class="high-res-loader">
-                <i class="fa-solid fa-spinner fa-spin"></i> 고화질로 불러오는 중
+                고화질로 불러오는 중...
             </div>
 
             <div class="nav-btn prev-btn" onclick="changeImage(-1)"><i class="fa-solid fa-angle-left"></i></div>
@@ -231,25 +231,21 @@ function updateModalUI(data) {
 
     const highImg = document.getElementById('modal-img-high');
     const lowImg = document.getElementById('modal-img-low');
-    const loader = document.getElementById('high-res-loader'); // 💡 로더 엘리먼트 가져오기
+    const loader = document.getElementById('high-res-loader');
 
-    // 초기 상태: 고화질 이미지 투명하게, 로더는 보이게 설정
     highImg.style.opacity = '0';
     if (loader) loader.style.opacity = '1';
 
     highImg.src = data.originalSrc;
     
-    // 💡 고화질 이미지가 완전히 로드되었을 때 실행되는 함수
     highImg.onload = () => {
-        highImg.style.opacity = '1'; // 고화질 이미지 보여주기
+        highImg.style.opacity = '1';
         
-        // 로딩 완료 후 로더 숨기고 제거하기
         if (loader) {
             loader.style.opacity = '0';
-            setTimeout(() => loader.remove(), 300); // 페이드아웃 후 DOM에서 깔끔하게 삭제
+            setTimeout(() => loader.remove(), 300);
         }
         
-        // 저화질 썸네일 숨기기
         setTimeout(() => { if (lowImg) lowImg.style.opacity = '0'; }, 100);
     };
 }
