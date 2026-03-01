@@ -280,6 +280,26 @@
     <lon>127.177183</lon>
     <address>천안시, 대한민국</address>
   </photo>
+  <photo name="Marado.jpg">
+    <make>Apple</make>
+    <model>iPhone 13 Pro Max</model>
+    <iso>50</iso>
+    <fNumber>1.5</fNumber>
+    <exposureTime>1/2994</exposureTime>
+    <focalLength>5.7 mm</focalLength>
+    <focal35mm>26 mmmm</focal35mm>
+    <dateTime>2026-02-14T13:39:49.297+09:00</dateTime>
+    <timeZone>+09:00</timeZone>
+    <fileSize>2.72 MB</fileSize>
+    <width>4032</width>
+    <height>3024</height>
+    <software>26.2.1</software>
+    <rgb>130,147,164</rgb>
+    <theme>light</theme>
+    <lat>33.116914</lat>
+    <lon>126.265481</lon>
+    <address>서귀포시, 대한민국</address>
+  </photo>
   <photo name="Meow.jpg">
     <make>SONY</make>
     <model>ILCE-6400</model>
@@ -419,26 +439,6 @@
     <lat></lat>
     <lon></lon>
     <address></address>
-  </photo>
-  <photo name="Seopjikoji.jpg">
-    <make>Apple</make>
-    <model>iPhone 13 Pro Max</model>
-    <iso>50</iso>
-    <fNumber>1.5</fNumber>
-    <exposureTime>1/2994</exposureTime>
-    <focalLength>5.7 mm</focalLength>
-    <focal35mm>26 mmmm</focal35mm>
-    <dateTime>2026-02-14T13:39:49.297+09:00</dateTime>
-    <timeZone>+09:00</timeZone>
-    <fileSize>2.72 MB</fileSize>
-    <width>4032</width>
-    <height>3024</height>
-    <software>26.2.1</software>
-    <rgb>130,147,164</rgb>
-    <theme>light</theme>
-    <lat>33.116914</lat>
-    <lon>126.265481</lon>
-    <address>서귀포시, 대한민국</address>
   </photo>
   <photo name="Seoul.jpg">
     <make>SONY</make>

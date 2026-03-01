@@ -92,7 +92,7 @@ section {
     align-items: flex-start;
     gap: 10px;
     padding: 10px;
-    max-width: 100%; 
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -112,7 +112,8 @@ section {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex: 1; /* 컬럼들이 동일한 너비를 가지도록 설정 */
+    flex: 1;
+    /* 컬럼들이 동일한 너비를 가지도록 설정 */
     width: 100%;
 }
 
@@ -121,7 +122,7 @@ section {
     position: relative;
     cursor: pointer;
     overflow: hidden;
-    width: 100%; 
+    width: 100%;
 }
 
 .img-container {
@@ -352,13 +353,25 @@ section {
     flex-direction: column;
     justify-content: center;
     color: #ddd;
-    overflow-y: auto;
+    overflow-y: overlay;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-gutter: stable both-edges;
 }
 
 .modal-info-container::-webkit-scrollbar {
-    width: 6px;
+    width: 6px; /* 스크롤 바 너비 */
+}
+
+.modal-info-container::-webkit-scrollbar-track {
+    background: transparent; /* 트랙을 투명하게 하여 콘텐츠가 보이게 함 */
+}
+
+.modal-info-container::-webkit-scrollbar-thumb {
+    background-color: rgba(136, 136, 136, 0.5); /* 바를 반투명하게 설정 */
+    border-radius: 10px;
+    border: 2px solid transparent; /* 콘텐츠와의 간격 효과 */
+    background-clip: padding-box;
 }
 
 .modal-info-container h2 {
@@ -522,16 +535,21 @@ section {
 
 /* --- Mobile View Adjustments --- */
 @media (max-width: 1024px) {
-/* 1. 모달 내부 컨텐츠 여백 제거 및 전체 화면 활용 */
+
+    /* 1. 모달 내부 컨텐츠 여백 제거 및 전체 화면 활용 */
     .modal-content {
-        padding: 0;           /* 안쪽 여백 완전히 제거 */
-        max-width: 98vw;     /* 너비 100% 활용 */
-        max-height: 98vh;    /* 높이 100% 활용 */
+        padding: 0;
+        /* 안쪽 여백 완전히 제거 */
+        max-width: 98vw;
+        /* 너비 100% 활용 */
+        max-height: 98vh;
+        /* 높이 100% 활용 */
     }
 
     #modal-body {
         flex-direction: column;
-        height: 100vh;        /* 전체 높이 유지 */
+        height: 100vh;
+        /* 전체 높이 유지 */
         width: 100vw;
     }
 
@@ -554,6 +572,12 @@ section {
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
 
+    /* 내부 제목이 너무 붙지 않도록 여백 추가 */
+    .modal-info-container h2 {
+        margin-top: 10px;
+        padding-top: 0;
+    }
+
     /* 닫기 버튼 전용 위치 및 여백 보정 (분산된 코드 병합) */
     .close-btn {
         right: 20px !important;
@@ -573,17 +597,15 @@ section {
     }
 
     /* 정보 패널 컨테이너 */
-    /* 1. 정보 패널 컨테이너 수정 */
     .modal-info-container {
         display: flex;
+        flex-direction: column;
+        /* 세로 방향 유지 */
+        justify-content: flex-start !important;
+        /* 핵심: 항상 위에서부터 정렬 */
         visibility: hidden;
-        /* 화면에서 숨기되 애니메이션은 가능하게 만듭니다. */
         opacity: 0;
-        /* 처음엔 투명하게 만듭니다. */
         transform: translateY(100%);
-        /* 창을 화면 아래로 100% 내려서 숨겨둡니다. */
-
-        /* 나타나고 사라질 때 작동할 부드러운 전환 효과(Transition)를 추가합니다. */
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0.3s;
 
         position: fixed;
@@ -591,12 +613,16 @@ section {
         left: 0;
         right: 0;
         width: 100%;
-        max-height: 70vh;
-        padding: 24px;
-        border-radius: 24px;
+        /* max-height를 조금 조절하고, padding-top을 충분히 주어 닫기 버튼과의 간섭을 피함 */
+        max-height: 75vh;
+        padding: 30px 24px 40px 24px;
+        border-radius: 35px;
+        /* 위쪽만 둥글게 */
         z-index: 3100;
         overflow-y: auto;
-        background: rgba(20, 20, 20, 0.95);
+        -webkit-overflow-scrolling: touch;
+        padding-right: 24px;
+        /* iOS/안드로이드 부드러운 스크롤 */
     }
 
     .modal.dark-theme .modal-info-container {
@@ -609,9 +635,12 @@ section {
 
     /* 정보 창 슬라이드 애니메이션 */
     .modal-info-container.show-info {
-        visibility: visible; /* 화면에 보이게 설정 */
-        opacity: 1; /* 투명도 100% */
-        transform: translateY(0); /* 원래 위치(화면 위쪽)로 부드럽게 올라옵니다. */
+        visibility: visible;
+        /* 화면에 보이게 설정 */
+        opacity: 1;
+        /* 투명도 100% */
+        transform: translateY(0);
+        /* 원래 위치(화면 위쪽)로 부드럽게 올라옵니다. */
     }
 
     /* 모바일 전용 정보 버튼의 개별 스타일 보정 */
