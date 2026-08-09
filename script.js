@@ -4,9 +4,8 @@
 
 let validResults = [];
 let currentImageIndex = 0;
-let touchstartX = 0;
-let touchendX = 0;
 let currentColumns = 0;
+let imageZoom = 1;
 
 document.addEventListener("DOMContentLoaded", async () => {
     const section = document.getElementById('gallery-section');
@@ -37,14 +36,19 @@ document.addEventListener("DOMContentLoaded", async () => {
             let fullDateTime = "정보 없음";
             let displayDate = "날짜 정보 없음";
 
-            if (rawDate && rawDate !== "N/A" && rawDate !== "1970:01:01 00:00:00") {
+            // 💡 수정됨: rawDate.trim() !== "" 조건 추가 및 유효한 날짜인지 검사 로직 추가
+            if (rawDate && rawDate !== "N/A" && rawDate !== "1970:01:01 00:00:00" && rawDate.trim() !== "") {
                 const d = new Date(rawDate);
-                // 상세 포맷: 0000년 00월 00일 00시 00분
-                fullDateTime = `${d.getFullYear()}년 ${String(d.getMonth() + 1).padStart(2, '0')}월 ${String(d.getDate()).padStart(2, '0')}일 ` +
-                               `${String(d.getHours()).padStart(2, '0')}시 ${String(d.getMinutes()).padStart(2, '0')}분`;
                 
-                // 갤러리 메타용: YYYY.MM.DD
-                displayDate = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+                // 💡 날짜 객체가 유효한 경우(NaN이 아닌 경우)에만 문자열 조립
+                if (!isNaN(d.getTime())) {
+                    // 상세 포맷: 0000년 00월 00일 00시 00분
+                    fullDateTime = `${d.getFullYear()}년 ${String(d.getMonth() + 1).padStart(2, '0')}월 ${String(d.getDate()).padStart(2, '0')}일 ` +
+                                   `${String(d.getHours()).padStart(2, '0')}시 ${String(d.getMinutes()).padStart(2, '0')}분`;
+                    
+                    // 갤러리 메타용: YYYY.MM.DD
+                    displayDate = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+                }
             }
 
             // --- 3. 위치 정보 및 주소 처리 ---
@@ -90,6 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         validResults.sort((a, b) => b.dateTime.localeCompare(a.dateTime));
+        document.getElementById('photo-count').textContent = validResults.length;
         renderGallery(section);
 
     } catch (error) {
@@ -233,6 +238,9 @@ function updateModalUI(data) {
     const lowImg = document.getElementById('modal-img-low');
     const loader = document.getElementById('high-res-loader');
 
+    // Each photo opens at its natural size so a zoom does not carry over.
+    setImageZoom(1);
+
     highImg.style.opacity = '0';
     if (loader) loader.style.opacity = '1';
 
@@ -248,6 +256,18 @@ function updateModalUI(data) {
         
         setTimeout(() => { if (lowImg) lowImg.style.opacity = '0'; }, 100);
     };
+}
+
+function setImageZoom(scale) {
+    imageZoom = Math.min(Math.max(scale, 1), 3);
+    document.querySelectorAll('#modal-img-low, #modal-img-high').forEach(img => {
+        img.style.transform = `scale(${imageZoom})`;
+    });
+}
+
+function touchDistance(touches) {
+    const [first, second] = touches;
+    return Math.hypot(second.clientX - first.clientX, second.clientY - first.clientY);
 }
 
 function renderDetailItem(label, value) {
@@ -298,13 +318,50 @@ function initGlobalEvents() {
         else if (e.key === 'Escape') closeModal();
     });
 
-    modal.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX, { passive: true });
-    modal.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX;
-        const infoBox = document.querySelector('.modal-info-container');
-        if (!infoBox?.classList.contains('show-info')) {
-            if (touchendX < touchstartX - 50) changeImage(1);
-            if (touchendX > touchstartX + 50) changeImage(-1);
+    let gesture = null;
+
+    modal.addEventListener('touchstart', e => {
+        if (!e.target.closest('.modal-image-container')) return;
+
+        if (e.touches.length === 2) {
+            gesture = {
+                isPinching: true,
+                startDistance: touchDistance(e.touches),
+                startZoom: imageZoom
+            };
+        } else if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            gesture = {
+                isPinching: false,
+                startX: touch.clientX,
+                startY: touch.clientY
+            };
         }
+    }, { passive: true });
+
+    modal.addEventListener('touchmove', e => {
+        if (!gesture || !e.target.closest('.modal-image-container') || e.touches.length !== 2) return;
+
+        gesture.isPinching = true;
+        setImageZoom(gesture.startZoom * (touchDistance(e.touches) / gesture.startDistance));
+        e.preventDefault();
+    }, { passive: false });
+
+    modal.addEventListener('touchend', e => {
+        if (!gesture || e.touches.length > 0) return;
+
+        const infoBox = document.querySelector('.modal-info-container');
+        const touch = e.changedTouches[0];
+        const deltaX = touch.clientX - gesture.startX;
+        const deltaY = touch.clientY - gesture.startY;
+
+        // Pinches and enlarged images are reserved for image inspection,
+        // so neither can accidentally trigger the next/previous photo.
+        if (!gesture.isPinching && imageZoom === 1 && !infoBox?.classList.contains('show-info') &&
+            Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            changeImage(deltaX < 0 ? 1 : -1);
+        }
+
+        gesture = null;
     }, { passive: true });
 }
