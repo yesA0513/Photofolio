@@ -6,6 +6,8 @@ let validResults = [];
 let currentImageIndex = 0;
 let currentColumns = 0;
 let imageZoom = 1;
+let imagePanX = 0;
+let imagePanY = 0;
 
 document.addEventListener("DOMContentLoaded", async () => {
     const section = document.getElementById('gallery-section');
@@ -260,8 +262,41 @@ function updateModalUI(data) {
 
 function setImageZoom(scale) {
     imageZoom = Math.min(Math.max(scale, 1), 3);
+    if (imageZoom === 1) {
+        imagePanX = 0;
+        imagePanY = 0;
+    }
+    setImageTransform();
+}
+
+function setImagePan(x, y) {
+    const imageContainer = document.querySelector('.modal-image-container');
+    if (!imageContainer) return;
+
+    const image = [document.getElementById('modal-img-high'), document.getElementById('modal-img-low')]
+        .find(candidate => candidate?.naturalWidth && candidate?.naturalHeight);
+    const aspectRatio = image?.naturalWidth && image?.naturalHeight
+        ? image.naturalWidth / image.naturalHeight
+        : imageContainer.clientWidth / imageContainer.clientHeight;
+    const containerRatio = imageContainer.clientWidth / imageContainer.clientHeight;
+    const displayedWidth = aspectRatio > containerRatio
+        ? imageContainer.clientWidth
+        : imageContainer.clientHeight * aspectRatio;
+    const displayedHeight = aspectRatio > containerRatio
+        ? imageContainer.clientWidth / aspectRatio
+        : imageContainer.clientHeight;
+
+    // Limit movement to the enlarged photo itself, including letterboxed images.
+    const maxX = (displayedWidth * (imageZoom - 1)) / 2;
+    const maxY = (displayedHeight * (imageZoom - 1)) / 2;
+    imagePanX = Math.min(Math.max(x, -maxX), maxX);
+    imagePanY = Math.min(Math.max(y, -maxY), maxY);
+    setImageTransform();
+}
+
+function setImageTransform() {
     document.querySelectorAll('#modal-img-low, #modal-img-high').forEach(img => {
-        img.style.transform = `scale(${imageZoom})`;
+        img.style.transform = `translate(${imagePanX}px, ${imagePanY}px) scale(${imageZoom})`;
     });
 }
 
@@ -334,21 +369,47 @@ function initGlobalEvents() {
             gesture = {
                 isPinching: false,
                 startX: touch.clientX,
-                startY: touch.clientY
+                startY: touch.clientY,
+                startPanX: imagePanX,
+                startPanY: imagePanY
             };
         }
     }, { passive: true });
 
     modal.addEventListener('touchmove', e => {
-        if (!gesture || !e.target.closest('.modal-image-container') || e.touches.length !== 2) return;
+        if (!gesture || !e.target.closest('.modal-image-container')) return;
 
-        gesture.isPinching = true;
-        setImageZoom(gesture.startZoom * (touchDistance(e.touches) / gesture.startDistance));
-        e.preventDefault();
+        if (e.touches.length === 2) {
+            gesture.isPinching = true;
+            setImageZoom(gesture.startZoom * (touchDistance(e.touches) / gesture.startDistance));
+            e.preventDefault();
+        } else if (e.touches.length === 1 && imageZoom > 1) {
+            const touch = e.touches[0];
+            setImagePan(
+                gesture.startPanX + touch.clientX - gesture.startX,
+                gesture.startPanY + touch.clientY - gesture.startY
+            );
+            e.preventDefault();
+        }
     }, { passive: false });
 
     modal.addEventListener('touchend', e => {
-        if (!gesture || e.touches.length > 0) return;
+        if (!gesture) return;
+
+        // Continue panning smoothly when a pinch ends with one finger still down.
+        if (e.touches.length === 1 && imageZoom > 1) {
+            const touch = e.touches[0];
+            gesture = {
+                isPinching: true,
+                startX: touch.clientX,
+                startY: touch.clientY,
+                startPanX: imagePanX,
+                startPanY: imagePanY
+            };
+            return;
+        }
+
+        if (e.touches.length > 0) return;
 
         const infoBox = document.querySelector('.modal-info-container');
         const touch = e.changedTouches[0];
