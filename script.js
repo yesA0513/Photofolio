@@ -246,18 +246,34 @@ function updateModalUI(data) {
     highImg.style.opacity = '0';
     if (loader) loader.style.opacity = '1';
 
-    highImg.src = data.originalSrc;
-    
-    highImg.onload = () => {
+    const showOriginal = () => {
+        if (!highImg.isConnected || !highImg.naturalWidth) return;
         highImg.style.opacity = '1';
+        lowImg.style.opacity = '0';
         
         if (loader) {
             loader.style.opacity = '0';
             setTimeout(() => loader.remove(), 300);
         }
         
-        setTimeout(() => { if (lowImg) lowImg.style.opacity = '0'; }, 100);
     };
+
+    // Register before assigning src, including when the original is cached.
+    highImg.onload = async () => {
+        try {
+            await highImg.decode();
+            showOriginal();
+        } catch {
+            showLoadError();
+        }
+    };
+    const showLoadError = () => {
+        if (loader && highImg.isConnected) {
+            loader.textContent = '원본 사진을 불러오지 못했습니다. 사진을 다시 열어 주세요.';
+        }
+    };
+    highImg.onerror = showLoadError;
+    highImg.src = data.originalSrc;
 }
 
 function setImageZoom(scale) {
@@ -352,6 +368,15 @@ function initGlobalEvents() {
         else if (e.key === 'ArrowRight') changeImage(1);
         else if (e.key === 'Escape') closeModal();
     });
+
+    modal.addEventListener('wheel', e => {
+        if (!modal.classList.contains('show') || !e.target.closest('.modal-image-container')) return;
+        e.preventDefault();
+        const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? modal.clientHeight : 1;
+        const delta = Math.max(-300, Math.min(300, e.deltaY * unit));
+        setImageZoom(imageZoom * Math.exp(-delta * 0.002));
+        setImagePan(imagePanX, imagePanY);
+    }, { passive: false });
 
     let gesture = null;
 
