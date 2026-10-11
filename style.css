@@ -294,6 +294,30 @@ section {
     object-fit: contain;
     transform-origin: center;
     will-change: transform;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.modal-image-container.is-zoomed {
+    cursor: grab;
+}
+
+.modal-image-container.is-dragging {
+    cursor: grabbing;
+}
+
+.modal-placeholder {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Fade the blurred preview before it reaches the clipped photo boundary.
+       Keep the mask outside the image transform so zooming cannot crop it. */
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 30px, #000 calc(100% - 30px), transparent),
+                        linear-gradient(to bottom, transparent, #000 30px, #000 calc(100% - 30px), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 30px, #000 calc(100% - 30px), transparent),
+                linear-gradient(to bottom, transparent, #000 30px, #000 calc(100% - 30px), transparent);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
 }
 
 .modal-image-container img.placeholder {

@@ -194,7 +194,9 @@ function updateModalUI(data) {
 
     modalBody.innerHTML = `
         <div class="modal-image-container">
-            <img class="placeholder" id="modal-img-low" src="${data.thumbSrc}">
+            <div class="modal-placeholder">
+                <img class="placeholder" id="modal-img-low" src="${data.thumbSrc}">
+            </div>
             <img class="full-image" id="modal-img-high">
             
             <div id="high-res-loader" class="high-res-loader">
@@ -311,6 +313,7 @@ function setImagePan(x, y) {
 }
 
 function setImageTransform() {
+    document.querySelector('.modal-image-container')?.classList.toggle('is-zoomed', imageZoom > 1);
     document.querySelectorAll('#modal-img-low, #modal-img-high').forEach(img => {
         img.style.transform = `translate(${imagePanX}px, ${imagePanY}px) scale(${imageZoom})`;
     });
@@ -370,18 +373,73 @@ function initGlobalEvents() {
     });
 
     modal.addEventListener('wheel', e => {
-        if (!modal.classList.contains('show') || !e.target.closest('.modal-image-container')) return;
+        const container = e.target.closest('.modal-image-container');
+        if (!modal.classList.contains('show') || !container) return;
         e.preventDefault();
         const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? modal.clientHeight : 1;
         const delta = Math.max(-300, Math.min(300, e.deltaY * unit));
+        const bounds = container.getBoundingClientRect();
+        const pointerX = e.clientX - bounds.left - bounds.width / 2;
+        const pointerY = e.clientY - bounds.top - bounds.height / 2;
+        const previousZoom = imageZoom;
+        const previousPanX = imagePanX;
+        const previousPanY = imagePanY;
         setImageZoom(imageZoom * Math.exp(-delta * 0.002));
-        setImagePan(imagePanX, imagePanY);
+        // Keep the image point under the cursor fixed as the scale changes.
+        const ratio = imageZoom / previousZoom;
+        setImagePan(
+            pointerX - (pointerX - previousPanX) * ratio,
+            pointerY - (pointerY - previousPanY) * ratio
+        );
     }, { passive: false });
+
+    let mouseDrag = null;
+    const stopMouseDrag = () => {
+        if (!mouseDrag) return;
+        const { container, pointerId } = mouseDrag;
+        mouseDrag = null;
+        container.classList.remove('is-dragging');
+        if (container.hasPointerCapture(pointerId)) container.releasePointerCapture(pointerId);
+    };
+
+    modal.addEventListener('pointerdown', e => {
+        const container = e.target.closest('.modal-image-container');
+        if (e.pointerType !== 'mouse' || e.button !== 0 || imageZoom <= 1 ||
+            !modal.classList.contains('show') || !container || e.target.closest('.nav-btn')) return;
+        e.preventDefault();
+        mouseDrag = {
+            container, pointerId: e.pointerId,
+            startX: e.clientX, startY: e.clientY,
+            startPanX: imagePanX, startPanY: imagePanY
+        };
+        container.setPointerCapture(e.pointerId);
+        container.classList.add('is-dragging');
+    });
+    modal.addEventListener('pointermove', e => {
+        if (!mouseDrag || e.pointerId !== mouseDrag.pointerId) return;
+        if (!e.buttons || imageZoom <= 1 || !modal.classList.contains('show')) {
+            stopMouseDrag();
+            return;
+        }
+        setImagePan(
+            mouseDrag.startPanX + e.clientX - mouseDrag.startX,
+            mouseDrag.startPanY + e.clientY - mouseDrag.startY
+        );
+    });
+    for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+        modal.addEventListener(event, e => {
+            if (e.pointerId === mouseDrag?.pointerId) stopMouseDrag();
+        });
+    }
+    window.addEventListener('blur', stopMouseDrag);
+    modal.addEventListener('dragstart', e => {
+        if (e.target.closest('.modal-image-container img')) e.preventDefault();
+    });
 
     let gesture = null;
 
     modal.addEventListener('touchstart', e => {
-        if (!e.target.closest('.modal-image-container')) return;
+        if (!e.target.closest('.modal-image-container') || e.target.closest('.nav-btn')) return;
 
         if (e.touches.length === 2) {
             gesture = {
@@ -450,4 +508,6 @@ function initGlobalEvents() {
 
         gesture = null;
     }, { passive: true });
+
+    modal.addEventListener('touchcancel', () => { gesture = null; }, { passive: true });
 }
