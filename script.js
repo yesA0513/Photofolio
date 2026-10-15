@@ -3,6 +3,10 @@
  */
 
 let validResults = [];
+let visibleResults = [];
+let locationGroups = [];
+let galleryView = 'all';
+let selectedLocation = '';
 let currentImageIndex = 0;
 let currentColumns = 0;
 let imageZoom = 1;
@@ -15,8 +19,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         const response = await fetch('photo_data.xml');
+        if (!response.ok) throw new Error(`사진 정보를 불러오지 못했습니다 (${response.status})`);
         const xmlText = await response.text();
         const xmlDoc = new DOMParser().parseFromString(xmlText, "text/xml");
+        if (xmlDoc.querySelector('parsererror')) throw new Error('사진 정보 XML을 읽을 수 없습니다.');
         const photos = xmlDoc.getElementsByTagName("photo");
 
         validResults = Array.from(photos).map(photo => {
@@ -91,16 +97,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                 megapixels: (w * h / 1000000).toFixed(1) + "M",
                 software: getVal("software"),
                 address: (address !== "N/A" && address !== "") ? address : "위치 정보 없음",
+                locationGroup: getLocationGroup(address),
                 locationLink
             };
         });
 
         validResults.sort((a, b) => b.dateTime.localeCompare(a.dateTime));
         document.getElementById('photo-count').textContent = validResults.length;
+        initLocationControls(section);
         renderGallery(section);
 
     } catch (error) {
         console.error("데이터 로드 중 오류 발생:", error);
+        document.getElementById('gallery-summary').textContent = '사진 정보를 불러오지 못했습니다. 페이지를 새로고침해 주세요.';
     } finally {
         loadingOverlay.classList.add('fade-out');
     }
@@ -122,6 +131,46 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
 
+function getLocationGroup(address) {
+    const normalized = address.trim().replace(/\s+/g, ' ').replace(/\s*,\s*/g, ', ');
+    return !normalized || /^(n\/a|unknown(?: location)?)$/i.test(normalized)
+        ? '위치 정보 없음'
+        : normalized;
+}
+
+function initLocationControls(container) {
+    const groups = new Map();
+    for (const photo of validResults) {
+        if (!groups.has(photo.locationGroup)) groups.set(photo.locationGroup, []);
+        groups.get(photo.locationGroup).push(photo);
+    }
+    locationGroups = Array.from(groups, ([name, photos]) => ({ name, photos })).sort((a, b) => {
+        if (a.name === '위치 정보 없음') return 1;
+        if (b.name === '위치 정보 없음') return -1;
+        return b.photos.length - a.photos.length || a.name.localeCompare(b.name, 'ko');
+    });
+
+    const filter = document.getElementById('location-filter');
+    filter.replaceChildren(new Option(`전체 지역 (${validResults.length}장)`, ''));
+    for (const group of locationGroups) {
+        filter.add(new Option(`${group.name} (${group.photos.length}장)`, group.name));
+    }
+    filter.addEventListener('change', () => {
+        selectedLocation = filter.value;
+        renderGallery(container);
+    });
+    document.querySelectorAll('[data-gallery-view]').forEach(button => {
+        button.addEventListener('click', () => {
+            galleryView = button.dataset.galleryView;
+            document.querySelectorAll('[data-gallery-view]').forEach(control => {
+                control.setAttribute('aria-pressed', String(control === button));
+            });
+            document.querySelector('.location-filter').hidden = galleryView !== 'location';
+            renderGallery(container);
+        });
+    });
+}
+
 function renderGallery(container) {
     container.innerHTML = '';
     const width = window.innerWidth;
@@ -131,6 +180,47 @@ function renderGallery(container) {
     else if (width <= 1920) currentColumns = 4;
     else currentColumns = 5;
 
+    const grouped = galleryView === 'location';
+    container.classList.toggle('gallery-grouped', grouped);
+    const groups = locationGroups.filter(group => !selectedLocation || group.name === selectedLocation);
+    visibleResults = grouped ? groups.flatMap(group => group.photos) : validResults;
+    const summary = document.getElementById('gallery-summary');
+    if (!visibleResults.length) {
+        summary.textContent = '표시할 사진이 없습니다.';
+        return;
+    }
+    if (!grouped) {
+        summary.textContent = `전체 ${visibleResults.length}장`;
+        renderPhotoColumns(container, visibleResults);
+        return;
+    }
+
+    const knownGroups = groups.filter(group => group.name !== '위치 정보 없음');
+    const unknownCount = groups.find(group => group.name === '위치 정보 없음')?.photos.length || 0;
+    summary.textContent = selectedLocation
+        ? `${selectedLocation} · ${visibleResults.length}장`
+        : `${knownGroups.length}개 지역 · 전체 ${visibleResults.length}장${unknownCount ? ` · 위치 정보 없음 ${unknownCount}장` : ''}`;
+    let startIndex = 0;
+    for (const group of groups) {
+        const section = document.createElement('div');
+        section.className = 'location-group';
+        const heading = document.createElement('h2');
+        heading.className = 'location-heading';
+        heading.textContent = group.name;
+        const count = document.createElement('span');
+        count.className = 'location-count';
+        count.textContent = `${group.photos.length}장`;
+        heading.appendChild(count);
+        const grid = document.createElement('div');
+        grid.className = 'gallery-grid';
+        section.append(heading, grid);
+        container.appendChild(section);
+        renderPhotoColumns(grid, group.photos, startIndex);
+        startIndex += group.photos.length;
+    }
+}
+
+function renderPhotoColumns(container, photos, startIndex = 0) {
     const columns = [];
     const colHeights = new Array(currentColumns).fill(0);
 
@@ -141,7 +231,7 @@ function renderGallery(container) {
         container.appendChild(col);
     }
 
-    validResults.forEach((data, index) => {
+    photos.forEach((data, index) => {
         const item = document.createElement('div');
         item.className = 'gallery-item';
         item.innerHTML = `
@@ -159,7 +249,7 @@ function renderGallery(container) {
                 </div>
             </div>
         `;
-        item.addEventListener('click', () => openModal(index));
+        item.addEventListener('click', () => openModal(startIndex + index));
 
         const shortestColIndex = colHeights.indexOf(Math.min(...colHeights));
         columns[shortestColIndex].appendChild(item);
@@ -170,7 +260,7 @@ function renderGallery(container) {
 function openModal(index) {
     currentImageIndex = index;
     const modal = document.getElementById('info-modal');
-    const data = validResults[index];
+    const data = visibleResults[index];
 
     document.body.classList.add('no-scroll');
     updateModalUI(data);
@@ -330,8 +420,9 @@ function renderDetailItem(label, value) {
 }
 
 function changeImage(step) {
-    currentImageIndex = (currentImageIndex + step + validResults.length) % validResults.length;
-    updateModalUI(validResults[currentImageIndex]);
+    if (!visibleResults.length) return;
+    currentImageIndex = (currentImageIndex + step + visibleResults.length) % visibleResults.length;
+    updateModalUI(visibleResults[currentImageIndex]);
 }
 
 function initGlobalEvents() {

@@ -18,6 +18,18 @@
     <header>
         <h1>Photofolio <span id="photo-count" class="photo-count" aria-label="사진 수"></span></h1>
     </header>
+
+    <div class="gallery-toolbar">
+        <div class="gallery-view-switch" role="group" aria-label="사진 보기 방식">
+            <button type="button" data-gallery-view="all" aria-pressed="true" aria-controls="gallery-section">전체 사진</button>
+            <button type="button" data-gallery-view="location" aria-pressed="false" aria-controls="gallery-section">위치별 보기</button>
+        </div>
+        <label class="location-filter" hidden>
+            <span>지역 선택</span>
+            <select id="location-filter" aria-controls="gallery-section"></select>
+        </label>
+        <p id="gallery-summary" aria-live="polite" aria-atomic="true">사진을 불러오는 중</p>
+    </div>
     
     <section id="gallery-section"></section>
 
