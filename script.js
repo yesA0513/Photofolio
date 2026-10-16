@@ -63,9 +63,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             const address = getVal("address");
             const lat = getVal("lat");
             const lon = getVal("lon");
-            const locationLink = (lat !== "" && lon !== "" && lat !== "N/A") 
-                ? `https://www.google.com/maps/search/?api=1&query=${lat},${lon}` 
-                : null;
+            const latitude = lat.trim() ? Number(lat) : NaN;
+            const longitude = lon.trim() ? Number(lon) : NaN;
+            const coordinates = Number.isFinite(latitude) && Math.abs(latitude) <= 90 &&
+                Number.isFinite(longitude) && Math.abs(longitude) <= 180
+                ? [latitude, longitude] : null;
 
             const w = parseInt(getVal("width"));
             const h = parseInt(getVal("height"));
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 software: getVal("software"),
                 address: (address !== "N/A" && address !== "") ? address : "위치 정보 없음",
                 locationGroup: getLocationGroup(address),
-                locationLink
+                coordinates
             };
         });
 
@@ -277,11 +279,6 @@ function updateModalUI(data) {
     modal.className = `modal show ${data.theme}-theme`;
     modal.style.backgroundColor = `rgba(${data.rgb}, 1)`;
 
-    // 주소 텍스트 자체에 링크를 걸고 아이콘을 제거함
-    const locationHTML = data.locationLink 
-        ? `<a href="${data.locationLink}" target="_blank" style="color:inherit; text-decoration:underline;">${data.address}</a>` 
-        : data.address;
-
     modalBody.innerHTML = `
         <div class="modal-image-container">
             <div class="modal-placeholder">
@@ -302,7 +299,7 @@ function updateModalUI(data) {
             <div class="modal-basic-info">
                 <span><i class="fa-solid fa-camera"></i> ${data.make} ${data.model}</span>
                 <span><i class="fa-regular fa-image"></i> ${data.megapixels} • ${data.extension}</span>
-                <span><i class="fa-solid fa-location-dot"></i> ${locationHTML}</span>
+                <span class="photo-location"><i class="fa-solid fa-location-dot"></i> </span>
             </div>
             <div class="modal-details">
                 ${renderDetailItem("촬영 일시", data.fullDateTime)}
@@ -318,6 +315,26 @@ function updateModalUI(data) {
             </div>
         </div>
     `;
+
+    const location = document.createElement(data.coordinates ? 'button' : 'span');
+    location.textContent = data.address;
+    if (data.coordinates) {
+        location.type = 'button';
+        location.className = 'photo-location-button';
+        location.setAttribute('aria-haspopup', 'dialog');
+        location.setAttribute('aria-controls', 'photo-map-dialog');
+        location.setAttribute('aria-label', `${data.address} — 사진 지도 열기`);
+        location.addEventListener('click', () => {
+            photoMap.open(data, visibleResults, photo => {
+                const index = visibleResults.indexOf(photo);
+                if (index < 0) return;
+                currentImageIndex = index;
+                updateModalUI(photo);
+                document.querySelector('.photo-location-button')?.focus({ preventScroll: true });
+            });
+        });
+    }
+    modalBody.querySelector('.photo-location').appendChild(location);
 
     const infoBtn = modalBody.querySelector('.info-btn');
     const infoBox = modalBody.querySelector('.modal-info-container');
@@ -450,13 +467,15 @@ function initGlobalEvents() {
     window.onclick = (e) => { if (e.target === modal) closeModal(); };
 
     // 💡 핵심: 안드로이드/기기의 뒤로가기 버튼을 눌렀을 때 실행되는 이벤트
-    window.addEventListener('popstate', () => {
-        if (modal.classList.contains('show')) {
+    window.addEventListener('popstate', e => {
+        if (photoMap.isOpen() && !e.state?.photoMapOpen) photoMap.close(false);
+        if (modal.classList.contains('show') && !e.state?.modalOpen) {
             closeModal(true); // 뒤로가기에 의해 닫혔다고 알려줌
         }
     });
 
     document.addEventListener('keydown', (e) => {
+        if (photoMap.isOpen()) return;
         if (!modal.classList.contains('show')) return;
         if (e.key === 'ArrowLeft') changeImage(-1);
         else if (e.key === 'ArrowRight') changeImage(1);

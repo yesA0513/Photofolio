@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:image" content="/img/preview/Preview.png">
     <title>Photofolio</title>
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.css">
+    <link rel="stylesheet" href="vendor/leaflet-markercluster/MarkerCluster.Default.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
@@ -40,12 +43,41 @@
         </div>
     </div>
 
+    <dialog id="photo-map-dialog" aria-labelledby="photo-map-title" aria-describedby="photo-map-description">
+        <div class="photo-map-panel">
+            <header class="photo-map-header">
+                <div>
+                    <h2 id="photo-map-title">사진 지도</h2>
+                    <p id="photo-map-description">지도 위의 사진을 눌러 촬영한 장소를 둘러보세요.</p>
+                </div>
+                <button type="button" id="photo-map-close" autofocus>사진으로 돌아가기</button>
+            </header>
+            <div class="photo-map-toolbar" role="group" aria-label="지도 범위">
+                <button type="button" id="photo-map-show-all">전체 위치 보기</button>
+                <button type="button" id="photo-map-show-selected">선택한 사진 위치</button>
+            </div>
+            <p id="photo-map-status" role="status" aria-live="polite"></p>
+            <div id="photo-map-canvas" tabindex="0" aria-label="사진 촬영 위치 지도"></div>
+            <div id="photo-map-selection" hidden>
+                <img id="photo-map-preview" alt="">
+                <div class="photo-map-photo-info">
+                    <strong id="photo-map-photo-name"></strong>
+                    <p id="photo-map-photo-address"></p>
+                    <button type="button" id="photo-map-open-photo">이 사진 보기</button>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
     <footer>
         <a href="https://github.com/yesA0513/Photofolio" target="_blank">
             <i class="fab fa-github"></i> GitHub
         </a>
         <p>Copyright © 2026 Noa Kim</p>
     </footer>
+    <script src="vendor/leaflet/leaflet.js"></script>
+    <script src="vendor/leaflet-markercluster/leaflet.markercluster.js"></script>
+    <script src="photo-map.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

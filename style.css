@@ -922,3 +922,345 @@ footer a {
     color: #888;
     text-decoration: none;
 }
+
+/* In-page photo map */
+.photo-location-button {
+    min-height: 44px;
+    padding: 8px 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: 1.5;
+    text-align: left;
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-underline-offset: 4px;
+    cursor: pointer;
+}
+
+.photo-location-button:hover {
+    text-decoration-thickness: 2px;
+}
+
+.photo-location-button:focus-visible,
+#photo-map-dialog button:focus-visible,
+#photo-map-dialog a:focus-visible,
+#photo-map-canvas:focus-visible,
+#photo-map-dialog .photo-map-marker:focus-visible {
+    outline: 3px solid #87b9ff;
+    outline-offset: 3px;
+}
+
+#photo-map-dialog {
+    width: min(1100px, 96vw);
+    max-width: none;
+    max-height: 94vh;
+    max-height: 94dvh;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #3a3a3a;
+    border-radius: 24px;
+    background: #191919;
+    color: #eee;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #555 #191919;
+}
+
+#photo-map-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.76);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#photo-map-dialog::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+}
+
+#photo-map-dialog::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: #555;
+}
+
+.photo-map-panel {
+    padding: 24px;
+}
+
+#photo-map-dialog .photo-map-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0;
+    text-align: left;
+}
+
+#photo-map-title {
+    font-size: 1.45rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+#photo-map-description {
+    margin-top: 6px;
+    color: #aaa;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+#photo-map-dialog button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #494949;
+    border-radius: 12px;
+    background: #262626;
+    color: #eee;
+    font: inherit;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+#photo-map-dialog button:hover {
+    border-color: #777;
+    background: #363636;
+}
+
+#photo-map-dialog button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+#photo-map-close {
+    flex-shrink: 0;
+}
+
+.photo-map-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+#photo-map-status {
+    min-height: 1.5em;
+    margin: 12px 0;
+    color: #bbb;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+#photo-map-canvas {
+    width: 100%;
+    height: 52vh;
+    height: min(52dvh, 540px);
+    min-height: 320px;
+    border: 1px solid #444;
+    border-radius: 16px;
+    background: #deddd8;
+    isolation: isolate;
+}
+
+#photo-map-canvas .leaflet-tile,
+#photo-map-canvas .leaflet-marker-icon {
+    max-width: none;
+    max-height: none;
+}
+
+#photo-map-canvas .leaflet-control-zoom a,
+#photo-map-canvas .leaflet-popup-close-button {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+}
+
+#photo-map-canvas .leaflet-control-attribution {
+    max-width: calc(100% - 12px);
+    padding: 3px 6px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #333;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+#photo-map-canvas .leaflet-control-attribution a {
+    color: #155282;
+}
+
+#photo-map-selection:not([hidden]) {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 18px;
+}
+
+#photo-map-preview {
+    display: block;
+    width: 104px;
+    height: 104px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #262626;
+}
+
+.photo-map-photo-info {
+    min-width: 0;
+}
+
+#photo-map-photo-name {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+#photo-map-photo-address {
+    margin-top: 4px;
+    color: #aaa;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+#photo-map-dialog #photo-map-open-photo {
+    margin-top: 10px;
+    border-color: #eee;
+    background: #eee;
+    color: #111;
+}
+
+#photo-map-dialog #photo-map-open-photo:hover {
+    border-color: #fff;
+    background: #fff;
+}
+
+.photo-map-marker {
+    border: 0;
+    background: transparent;
+}
+
+.photo-map-marker img {
+    display: block;
+    width: 52px;
+    height: 52px;
+    border: 3px solid #fff;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #262626;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
+
+.photo-map-marker.is-selected img {
+    border-color: #73aaff;
+    box-shadow: 0 0 0 3px #245eac, 0 3px 12px rgba(0, 0, 0, 0.45);
+}
+
+.photo-map-marker-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 5px;
+    border: 2px solid #fff;
+    border-radius: 12px;
+    background: #202020;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+#photo-map-canvas .leaflet-popup-content {
+    margin: 32px 14px 14px;
+    max-height: 240px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+#photo-map-dialog .photo-map-popup-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px;
+    border-color: #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+#photo-map-dialog .photo-map-popup-button:hover {
+    border-color: #8ba9c8;
+    background: #f0f5fc;
+}
+
+.photo-map-popup-button img {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+@media (max-width: 600px) {
+    #photo-map-dialog {
+        border-radius: 18px;
+    }
+
+    .photo-map-panel {
+        padding: 16px;
+    }
+
+    #photo-map-dialog .photo-map-header {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    #photo-map-title {
+        font-size: 1.25rem;
+    }
+
+    .photo-map-toolbar {
+        gap: 8px;
+        margin-top: 14px;
+    }
+
+    #photo-map-dialog .photo-map-toolbar button {
+        flex: 1;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    #photo-map-canvas {
+        height: 45vh;
+        height: 45dvh;
+        border-radius: 12px;
+    }
+
+    #photo-map-selection:not([hidden]) {
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    #photo-map-preview {
+        width: 76px;
+        height: 76px;
+        border-radius: 10px;
+    }
+}
